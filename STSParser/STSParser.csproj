@@ -50,8 +50,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DocumentParser.cs" />
+    <Compile Include="Models\ItemMetadata.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TableParser.cs" />
+    <Compile Include="Utilities\StringExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
