@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace STSParser.Models
+﻿namespace STSParser.Models.Source
 {
-    public class ItemMetadata : Dictionary<string, string>
+    public class ItemMetadata : StsMetadata
     {
         public ItemMetadata()
         {
@@ -16,16 +13,6 @@ namespace STSParser.Models
             Add("CorrectAnswer", string.Empty);
             Add("PassageTitle", string.Empty);
             Add("PassageCode", string.Empty);
-        }
-
-        public bool AddItemMetadata(string key, string value)
-        {
-            if (!Keys.Any(x => x.Equals(key)))
-            {
-                return false;
-            }
-            this[key] = value;
-            return true;
         }
     }
 }

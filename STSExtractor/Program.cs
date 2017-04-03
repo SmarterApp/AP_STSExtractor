@@ -5,6 +5,7 @@ using System.Linq;
 using HtmlAgilityPack;
 using NLog;
 using STSParser;
+using STSParser.Parsers.Source;
 
 namespace STSExtractor
 {
