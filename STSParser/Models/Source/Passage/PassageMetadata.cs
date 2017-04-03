@@ -1,4 +1,4 @@
-﻿namespace STSParser.Models.Source
+﻿namespace STSParser.Models.Source.Passage
 {
     public class PassageMetadata : StsMetadata
     {

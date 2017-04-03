@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using HtmlAgilityPack;
 using STSParser.Models.Source;
+using STSParser.Models.Source.Item;
+using STSParser.Models.Source.Passage;
+using STSParser.Utilities;
 
 namespace STSParser.Parsers.Source
 {
@@ -17,7 +21,8 @@ namespace STSParser.Parsers.Source
 
         public void Parse()
         {
-            var itemMetadata = new List<ItemMetadata>();
+            var items = new List<Item>();
+            var passages = new List<Passage>();
             var body = Navigator.DocumentNode.SelectSingleNode("//body");
             var children = body.ChildNodes;
             foreach (var top in children)
@@ -48,7 +53,7 @@ namespace STSParser.Parsers.Source
                             .SelectMany(x => x.ChildNodes
                                 .Where(y => y.Name.Equals("td")))
                             .ToList();
-                        itemMetadata.Add((ItemMetadata) MetadataParser.Parse(data));
+                        items.Add(new Item {Metadata = (ItemMetadata) MetadataParser.Parse(data)});
                         isItemMetadata = false;
                     }
                     else if (child.Name.Equals("table", StringComparison.OrdinalIgnoreCase) && isPassageMetadata)
@@ -58,65 +63,55 @@ namespace STSParser.Parsers.Source
                             .SelectMany(x => x.ChildNodes
                                 .Where(y => y.Name.Equals("td")))
                             .ToList();
+                        passages.Add(new Passage {Metadata = (PassageMetadata) MetadataParser.Parse(data, true)});
+                        isPassageMetadata = false;
                     }
                     else if (child.Name.Equals("table", StringComparison.OrdinalIgnoreCase) && !isItemMetadata &&
                              !isPassageMetadata)
                     {
+                        var itemBody = new ItemBody();
+                        var key = string.Empty;
                         foreach (
                             var p in
-                            child.ChildNodes.First(x => x.Name.Equals("tr", StringComparison.OrdinalIgnoreCase))
-                                .ChildNodes.First(x => x.Name.Equals("td", StringComparison.OrdinalIgnoreCase))
-                                .ChildNodes.Where(x => x.Name.Equals("p", StringComparison.OrdinalIgnoreCase)))
+                            child.ChildNodes.Where(x => x.Name.Equals("tr", StringComparison.OrdinalIgnoreCase)).SelectMany(y =>
+                                y.ChildNodes.Where(x => x.Name.Equals("td", StringComparison.OrdinalIgnoreCase))).SelectMany(z =>
+                                z.ChildNodes.Where(x => x.Name.Equals("p", StringComparison.OrdinalIgnoreCase))))
                         {
-                            if (
-                                p.ChildNodes.Where(x => x.Name.Equals("b", StringComparison.OrdinalIgnoreCase))
-                                    .SelectMany(
-                                        x =>
-                                            x.ChildNodes.Where(
-                                                y => y.Name.Equals("span", StringComparison.OrdinalIgnoreCase)))
-                                    .Any(x => x.InnerText.Trim().Equals("A")))
+
+                            var answer = p.ChildNodes.Where(x => x.Name.Equals("b", StringComparison.OrdinalIgnoreCase))
+                                .SelectMany(
+                                    x =>
+                                        x.ChildNodes.Where(
+                                            y => y.Name.Equals("span", StringComparison.OrdinalIgnoreCase)))
+                                .FirstOrDefault(x => StringUtilities.MatchesCharacterInRange(x.InnerText, 'A', 'D'))?.InnerText;
+
+                            if (!string.IsNullOrEmpty(answer))
                             {
-                                Console.WriteLine("We have an A!");
+
+                                var stringChoice =
+                                    p.ChildNodes.FirstOrDefault(
+                                        x => x.Name.Equals("span", StringComparison.OrdinalIgnoreCase));
+
+                                if (stringChoice != null)
+                                {
+                                    itemBody.AnswerChoices.Add(answer, new BodyElement
+                                    {
+                                        Text = stringChoice.InnerText
+                                    });
+                                }
+                                continue;
                             }
-                            else if (
-                                p.ChildNodes.Where(x => x.Name.Equals("b", StringComparison.OrdinalIgnoreCase))
-                                    .SelectMany(
-                                        x =>
-                                            x.ChildNodes.Where(
-                                                y => y.Name.Equals("span", StringComparison.OrdinalIgnoreCase)))
-                                    .Any(x => x.InnerText.Trim().Equals("B")))
+
+                            if (!string.IsNullOrEmpty(key))
                             {
-                                Console.WriteLine("We have an B!");
-                            }
-                            else if (
-                                p.ChildNodes.Where(x => x.Name.Equals("b", StringComparison.OrdinalIgnoreCase))
-                                    .SelectMany(
-                                        x =>
-                                            x.ChildNodes.Where(
-                                                y => y.Name.Equals("span", StringComparison.OrdinalIgnoreCase)))
-                                    .Any(x => x.InnerText.Trim().Equals("C")))
-                            {
-                                Console.WriteLine("We have an C!");
-                            }
-                            else if (
-                                p.ChildNodes.Where(x => x.Name.Equals("b", StringComparison.OrdinalIgnoreCase))
-                                    .SelectMany(
-                                        x =>
-                                            x.ChildNodes.Where(
-                                                y => y.Name.Equals("span", StringComparison.OrdinalIgnoreCase)))
-                                    .Any(x => x.InnerText.Trim().Equals("D")))
-                            {
-                                Console.WriteLine("We have an D!");
-                            }
-                            else if (
-                                p.ChildNodes.Where(x => x.Name.Equals("b", StringComparison.OrdinalIgnoreCase))
-                                    .SelectMany(
-                                        x =>
-                                            x.ChildNodes.Where(
-                                                y => y.Name.Equals("span", StringComparison.OrdinalIgnoreCase)))
-                                    .Any(x => x.InnerText.Trim().Equals("E")))
-                            {
-                                Console.WriteLine("We have an E!");
+                                var img =
+                                    p.ChildNodes.First(
+                                        x => x.Name.Equals("img", StringComparison.OrdinalIgnoreCase));
+                                itemBody.AnswerChoices.Add(key, new BodyElement
+                                {
+                                    Image = Image.FromFile(img.InnerText)
+                                });
+                                key = string.Empty;
                             }
                         }
                     }

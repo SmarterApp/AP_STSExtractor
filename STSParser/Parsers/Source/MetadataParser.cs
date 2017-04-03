@@ -2,6 +2,8 @@
 using System.Linq;
 using HtmlAgilityPack;
 using STSParser.Models.Source;
+using STSParser.Models.Source.Item;
+using STSParser.Models.Source.Passage;
 using STSParser.Utilities;
 
 namespace STSParser.Parsers.Source
