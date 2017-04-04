@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using HtmlAgilityPack;
+using STSCommon;
 using STSParser.Models.Source;
 using STSParser.Models.Source.Item;
 using STSParser.Models.Source.Passage;
@@ -23,6 +25,7 @@ namespace STSParser.Parsers.Source
         {
             var items = new List<Item>();
             var passages = new List<Passage>();
+            var isItem = true;
             var body = Navigator.DocumentNode.SelectSingleNode("//body");
             var children = body.ChildNodes;
             foreach (var top in children)
@@ -48,76 +51,82 @@ namespace STSParser.Parsers.Source
                     }
                     else if (child.Name.Equals("table", StringComparison.OrdinalIgnoreCase) && isItemMetadata)
                     {
-                        var data = child.ChildNodes
-                            .Where(x => x.Name.Equals("tr"))
-                            .SelectMany(x => x.ChildNodes
-                                .Where(y => y.Name.Equals("td")))
-                            .ToList();
-                        items.Add(new Item {Metadata = (ItemMetadata) MetadataParser.Parse(data)});
+                        items.Add(new Item {Metadata = (ItemMetadata) MetadataParser.Parse(child)});
                         isItemMetadata = false;
+                        isItem = true;
                     }
                     else if (child.Name.Equals("table", StringComparison.OrdinalIgnoreCase) && isPassageMetadata)
                     {
-                        var data = child.ChildNodes
-                            .Where(x => x.Name.Equals("tr"))
-                            .SelectMany(x => x.ChildNodes
-                                .Where(y => y.Name.Equals("td")))
-                            .ToList();
-                        passages.Add(new Passage {Metadata = (PassageMetadata) MetadataParser.Parse(data, true)});
+                        passages.Add(new Passage {Metadata = (PassageMetadata) MetadataParser.Parse(child, true)});
                         isPassageMetadata = false;
+                        isItem = false;
                     }
                     else if (child.Name.Equals("table", StringComparison.OrdinalIgnoreCase) && !isItemMetadata &&
                              !isPassageMetadata)
                     {
                         var itemBody = new ItemBody();
-                        var key = string.Empty;
+                        var passageBody = new PassageBody();
                         foreach (
                             var p in
-                            child.ChildNodes.Where(x => x.Name.Equals("tr", StringComparison.OrdinalIgnoreCase)).SelectMany(y =>
-                                y.ChildNodes.Where(x => x.Name.Equals("td", StringComparison.OrdinalIgnoreCase))).SelectMany(z =>
-                                z.ChildNodes.Where(x => x.Name.Equals("p", StringComparison.OrdinalIgnoreCase))))
+                            child.ChildNodes.Where(x => x.Name.Equals("tr", StringComparison.OrdinalIgnoreCase))
+                                .SelectMany(y =>
+                                    y.ChildNodes.Where(x => x.Name.Equals("td", StringComparison.OrdinalIgnoreCase)))
+                                .SelectMany(z =>
+                                    z.ChildNodes.Where(x => x.Name.Equals("p", StringComparison.OrdinalIgnoreCase))))
                         {
-
-                            var answer = p.ChildNodes.Where(x => x.Name.Equals("b", StringComparison.OrdinalIgnoreCase))
-                                .SelectMany(
-                                    x =>
-                                        x.ChildNodes.Where(
-                                            y => y.Name.Equals("span", StringComparison.OrdinalIgnoreCase)))
-                                .FirstOrDefault(x => StringUtilities.MatchesCharacterInRange(x.InnerText, 'A', 'D'))?.InnerText;
-
-                            if (!string.IsNullOrEmpty(answer))
+                            if (isItem)
                             {
+                                var answer =
+                                    p.ChildNodes.Where(x => x.Name.Equals("b", StringComparison.OrdinalIgnoreCase))
+                                        .SelectMany(
+                                            x =>
+                                                x.ChildNodes.Where(
+                                                    y => y.Name.Equals("span", StringComparison.OrdinalIgnoreCase)))
+                                        .FirstOrDefault(
+                                            x => StringUtilities.MatchesCharacterInRange(x.InnerText, 'A', 'D'))?
+                                        .InnerText.Trim();
 
-                                var stringChoice =
-                                    p.ChildNodes.FirstOrDefault(
-                                        x => x.Name.Equals("span", StringComparison.OrdinalIgnoreCase));
-
-                                if (stringChoice != null)
+                                if (!string.IsNullOrEmpty(answer))
                                 {
-                                    itemBody.AnswerChoices.Add(answer, new BodyElement
+                                    var stringChoice =
+                                        p.ChildNodes.FirstOrDefault(
+                                                x => x.Name.Equals("span", StringComparison.OrdinalIgnoreCase))?
+                                            .InnerText.Trim();
+                                    var imageChoice =
+                                        p.ChildNodes.FirstOrDefault(
+                                                x => x.Name.Equals("img", StringComparison.OrdinalIgnoreCase))?
+                                            .GetAttributeValue("src", string.Empty);
+                                    if (!string.IsNullOrEmpty(stringChoice) && imageChoice == null)
                                     {
-                                        Text = stringChoice.InnerText
-                                    });
+                                        itemBody.AnswerChoices.Add(answer, new BodyElement
+                                        {
+                                            Text = stringChoice
+                                        });
+                                    }
+                                    else if (!string.IsNullOrEmpty(imageChoice))
+                                    {
+                                        var path = Path.Combine(new FileInfo(ExtractionSettings.Input).DirectoryName,
+                                            imageChoice.ReverseSlashes());
+                                        itemBody.AnswerChoices.Add(answer, new BodyElement
+                                        {
+                                            Image = Image.FromFile(path)
+                                        });
+                                    }
                                 }
-                                continue;
                             }
-
-                            if (!string.IsNullOrEmpty(key))
-                            {
-                                var img =
-                                    p.ChildNodes.First(
-                                        x => x.Name.Equals("img", StringComparison.OrdinalIgnoreCase));
-                                itemBody.AnswerChoices.Add(key, new BodyElement
-                                {
-                                    Image = Image.FromFile(img.InnerText)
-                                });
-                                key = string.Empty;
-                            }
+                        }
+                        if (isItem)
+                        {
+                            items.Last().Body = itemBody;
+                        }
+                        else
+                        {
+                            passages.Last().Body = passageBody;
                         }
                     }
                 }
             }
-
+            var test = items.SelectMany(x => x.Body.AnswerChoices).Where(x => x.Value.IsResource());
             Console.ReadKey();
         }
     }

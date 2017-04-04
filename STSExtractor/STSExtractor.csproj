@@ -41,11 +41,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -63,6 +59,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\STSCommon\STSCommon.csproj">
+      <Project>{2594e426-f210-4461-a3ec-5ac5106b6299}</Project>
+      <Name>STSCommon</Name>
+    </ProjectReference>
     <ProjectReference Include="..\STSParser\STSParser.csproj">
       <Project>{0b538924-a48d-4ab3-931a-9d12ffb196ec}</Project>
       <Name>STSParser</Name>

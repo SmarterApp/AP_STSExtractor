@@ -10,8 +10,13 @@ namespace STSParser.Parsers.Source
 {
     public static class MetadataParser
     {
-        public static StsMetadata Parse(IList<HtmlNode> nodes, bool isPassage = false)
+        public static StsMetadata Parse(HtmlNode table, bool isPassage = false)
         {
+            var nodes = table.ChildNodes
+                            .Where(x => x.Name.Equals("tr"))
+                            .SelectMany(x => x.ChildNodes
+                                .Where(y => y.Name.Equals("td")))
+                            .ToList();
             var metadata = isPassage
                 ? new PassageMetadata()
                 : (StsMetadata) new ItemMetadata();
@@ -20,11 +25,16 @@ namespace STSParser.Parsers.Source
                 if (metadata.Keys.Contains(nodes[i].InnerText.RemoveSpecialCharacters()))
                 {
                     metadata.AddMetadata(nodes[i].InnerText.RemoveSpecialCharacters(),
-                        nodes[i + 1].InnerText.RemoveSpecialCharacters());
+                        nodes[i + 1].InnerText.RestrictToSingleWhiteSpace());
                     i += 2;
                 }
                 else
                 {
+                    var correctAnswer = nodes[i].InnerText.RestrictToSingleWhiteSpace();
+                    if (StringUtilities.MatchesCharacterInRange(correctAnswer, 'A','D'))
+                    {
+                        metadata.AddMetadata("CorrectAnswer", correctAnswer);
+                    }
                     i++;
                 }
             }

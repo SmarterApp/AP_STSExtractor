@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using HtmlAgilityPack;
 using NLog;
-using STSParser;
+using STSCommon;
 using STSParser.Parsers.Source;
 
 namespace STSExtractor
@@ -46,6 +46,7 @@ namespace STSExtractor
                                     "Invalid command line. '-i' option not followed by filename.");
                             }
                             Logger.Info($"Input found: {args[i]}");
+                            ExtractionSettings.Input = args[i];
                             inputFilenames.Add(args[i]);
                         }
                             break;
@@ -69,7 +70,8 @@ namespace STSExtractor
                             {
                                 oFilename = oFilename.Substring(0, oFilename.Length - 4);
                                 Logger.Info($"Output filename set to: {args[i]}");
-                            }
+                                    ExtractionSettings.Output = args[i];
+                                }
                         }
                             break;
 

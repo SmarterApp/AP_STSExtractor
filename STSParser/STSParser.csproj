@@ -72,5 +72,11 @@
     <Folder Include="Models\Destination\" />
     <Folder Include="Parsers\Destination\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\STSCommon\STSCommon.csproj">
+      <Project>{2594e426-f210-4461-a3ec-5ac5106b6299}</Project>
+      <Name>STSCommon</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
