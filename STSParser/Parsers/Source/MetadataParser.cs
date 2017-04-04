@@ -31,7 +31,7 @@ namespace STSParser.Parsers.Source
                 else
                 {
                     var correctAnswer = nodes[i].InnerText.RestrictToSingleWhiteSpace();
-                    if (StringUtilities.MatchesCharacterInRange(correctAnswer, 'A','D'))
+                    if (StringUtilities.MatchesCharacterInRange(correctAnswer, 'A','D') && metadata.ContainsKey("CorrectAnswer"))
                     {
                         metadata.AddMetadata("CorrectAnswer", correctAnswer);
                     }
