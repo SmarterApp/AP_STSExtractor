@@ -70,8 +70,8 @@ namespace STSExtractor
                             {
                                 oFilename = oFilename.Substring(0, oFilename.Length - 4);
                                 Logger.Info($"Output filename set to: {args[i]}");
-                                    ExtractionSettings.Output = args[i];
-                                }
+                                ExtractionSettings.Output = args[i];
+                            }
                         }
                             break;
 

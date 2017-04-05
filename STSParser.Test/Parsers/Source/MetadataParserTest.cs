@@ -7,12 +7,12 @@ namespace STSParser.Test.Parsers.Source
     [TestClass]
     public class MetadataParserTest
     {
-        public HtmlNode ItemTable { get; set; }
+        public HtmlNode ItemMetadataTable { get; set; }
 
         [TestInitialize]
         public void Setup()
         {
-            ItemTable = HtmlNode.CreateNode(
+            ItemMetadataTable = HtmlNode.CreateNode(
                 @"<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 style='border-collapse: collapse'>
                 <tr style='page-break-inside: avoid'>
                     <td width=169 valign=top style='padding: 0in 5.4pt 0in 5.4pt; width: 126.9pt;'>
@@ -127,7 +127,7 @@ namespace STSParser.Test.Parsers.Source
         {
             // Arrange
             // Act
-            var result = MetadataParser.Parse(ItemTable);
+            var result = ItemMetadataParser.Parse(ItemMetadataTable);
 
             // Assert
             Assert.IsTrue(result.ContainsKey("ItemCode"));

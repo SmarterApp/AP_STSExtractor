@@ -1,22 +1,21 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using HtmlAgilityPack;
+using STSCommon.Utilities;
 using STSParser.Models.Source;
 using STSParser.Models.Source.Item;
 using STSParser.Models.Source.Passage;
-using STSParser.Utilities;
 
 namespace STSParser.Parsers.Source
 {
-    public static class MetadataParser
+    public static class ItemMetadataParser
     {
         public static StsMetadata Parse(HtmlNode table, bool isPassage = false)
         {
             var nodes = table.ChildNodes
-                            .Where(x => x.Name.Equals("tr"))
-                            .SelectMany(x => x.ChildNodes
-                                .Where(y => y.Name.Equals("td")))
-                            .ToList();
+                .Where(x => x.Name.Equals("tr"))
+                .SelectMany(x => x.ChildNodes
+                    .Where(y => y.Name.Equals("td")))
+                .ToList();
             var metadata = isPassage
                 ? new PassageMetadata()
                 : (StsMetadata) new ItemMetadata();
@@ -31,7 +30,8 @@ namespace STSParser.Parsers.Source
                 else
                 {
                     var correctAnswer = nodes[i].InnerText.RestrictToSingleWhiteSpace();
-                    if (StringUtilities.MatchesCharacterInRange(correctAnswer, 'A','D') && metadata.ContainsKey("CorrectAnswer"))
+                    if (StringUtilities.MatchesCharacterInRange(correctAnswer, 'A', 'D') &&
+                        metadata.ContainsKey("CorrectAnswer"))
                     {
                         metadata.AddMetadata("CorrectAnswer", correctAnswer);
                     }
