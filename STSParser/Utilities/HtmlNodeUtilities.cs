@@ -1,0 +1,24 @@
+﻿using System;
+using System.Linq;
+using HtmlAgilityPack;
+using STSCommon.Utilities;
+using STSParser.Models.Source;
+
+namespace STSParser.Utilities
+{
+    public static class HtmlNodeUtilities
+    {
+        public static BodyElement BodyElementFromNode(HtmlNode node)
+        {
+            var element = new BodyElement();
+            var imgNode =
+                node.Descendants().FirstOrDefault(x => x.Name.Equals("img", StringComparison.OrdinalIgnoreCase));
+            element.Text = node.InnerText;
+            if (imgNode != null)
+            {
+                element.Image = ImageUtilities.ImageFromParentHtmlNode(imgNode);
+            }
+            return element;
+        }
+    }
+}

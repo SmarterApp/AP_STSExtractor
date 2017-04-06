@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using HtmlAgilityPack;
 
 namespace STSCommon.Utilities
@@ -22,22 +21,12 @@ namespace STSCommon.Utilities
             return new FileInfo(ExtractionSettings.Input).DirectoryName;
         }
 
-        private static bool ElementHasValidChildImage(HtmlNode node)
-        {
-            return node.HasChildNodes &&
-                   node.ChildNodes.Any(x => x.Name.Equals("img", StringComparison.OrdinalIgnoreCase)) &&
-                   node.ChildNodes.First(x => x.Name.Equals("img", StringComparison.OrdinalIgnoreCase)).HasAttributes &&
-                   node.ChildNodes.First(x => x.Name.Equals("img", StringComparison.OrdinalIgnoreCase))
-                       .Attributes.Contains("src");
-        }
-
         private static string RetrieveChildImageSource(HtmlNode node)
         {
-            if (ElementHasValidChildImage(node))
+            if (node.Attributes.Contains("src"))
             {
                 return
-                    node.ChildNodes.First(x => x.Name.Equals("img", StringComparison.OrdinalIgnoreCase))
-                        .GetAttributeValue("src", string.Empty).ReverseSlashes();
+                    node.GetAttributeValue("src", string.Empty).ReverseSlashes();
             }
             throw new ArgumentException("Attempted retrieval of img without a src attribute");
         }

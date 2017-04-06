@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using HtmlAgilityPack;
 using STSCommon.Utilities;
-using STSParser.Models.Source;
 using STSParser.Models.Source.Passage;
+using STSParser.Utilities;
 
 namespace STSParser.Parsers.Source
 {
@@ -38,20 +38,7 @@ namespace STSParser.Parsers.Source
                 }
                 else
                 {
-                    if (!string.IsNullOrEmpty(nodeInfo))
-                    {
-                        passage.Body.Elements.Add(new BodyElement
-                        {
-                            Text = nodeInfo
-                        });
-                    }
-                    else if (node.ChildNodes.Any(x => x.Name.Equals("img", StringComparison.OrdinalIgnoreCase)))
-                    {
-                        passage.Body.Elements.Add(new BodyElement
-                        {
-                            Image = ImageUtilities.ImageFromParentHtmlNode(node)
-                        });
-                    }
+                    passage.Body.Elements.Add(HtmlNodeUtilities.BodyElementFromNode(node));
                 }
             }
             return passage;

@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
 using System.Linq;
 using HtmlAgilityPack;
-using STSCommon;
-using STSCommon.Utilities;
-using STSParser.Models.Source;
 using STSParser.Models.Source.Item;
-using STSParser.Models.Source.Passage;
 
 namespace STSParser.Parsers.Source
 {
@@ -21,13 +14,10 @@ namespace STSParser.Parsers.Source
 
         private HtmlDocument Navigator { get; }
 
-        public void Parse()
+        public STSAssessment Parse()
         {
-            var items = new List<Item>();
-            var passages = new List<Passage>();
-            var body = Navigator.DocumentNode.SelectSingleNode("//body");
-            var children = body.ChildNodes;
-            foreach (var div in children.Where(x => x.Name.Equals("div", StringComparison.OrdinalIgnoreCase)))
+            var result = new STSAssessment();
+            foreach (var div in Navigator.DocumentNode.SelectNodes("//div"))
             {
                 var isItemMetadata = false;
                 var nodes = div.ChildNodes;
@@ -38,7 +28,7 @@ namespace STSParser.Parsers.Source
                         var remainingParagraphNodes =
                             nodes.Skip(i)
                                 .Where(x => x.Name.Equals("p", StringComparison.OrdinalIgnoreCase)).ToList();
-                        passages.Add(PassageParser.Parse(remainingParagraphNodes));
+                        result.Passages.Add(PassageParser.Parse(remainingParagraphNodes));
                         break;
                     }
                     if (nodes[i].Name.Equals("p", StringComparison.OrdinalIgnoreCase))
@@ -51,64 +41,16 @@ namespace STSParser.Parsers.Source
                     }
                     else if (nodes[i].Name.Equals("table", StringComparison.OrdinalIgnoreCase) && isItemMetadata)
                     {
-                        items.Add(new Item {Metadata = (ItemMetadata) ItemMetadataParser.Parse(nodes[i])});
+                        result.Items.Add(new Item {Metadata = (ItemMetadata) ItemMetadataParser.Parse(nodes[i])});
                         isItemMetadata = false;
                     }
                     else if (nodes[i].Name.Equals("table", StringComparison.OrdinalIgnoreCase) && !isItemMetadata)
                     {
-                        var itemBody = new ItemBody();
-                        foreach (
-                            var p in
-                            nodes[i].ChildNodes.Where(x => x.Name.Equals("tr", StringComparison.OrdinalIgnoreCase))
-                                .SelectMany(y =>
-                                    y.ChildNodes.Where(x => x.Name.Equals("td", StringComparison.OrdinalIgnoreCase)))
-                                .SelectMany(z =>
-                                    z.ChildNodes.Where(x => x.Name.Equals("p", StringComparison.OrdinalIgnoreCase))))
-                        {
-                            var answer =
-                                p.ChildNodes.Where(x => x.Name.Equals("b", StringComparison.OrdinalIgnoreCase))
-                                    .SelectMany(
-                                        x =>
-                                            x.ChildNodes.Where(
-                                                y => y.Name.Equals("span", StringComparison.OrdinalIgnoreCase)))
-                                    .FirstOrDefault(
-                                        x => StringUtilities.MatchesCharacterInRange(x.InnerText, 'A', 'D'))?
-                                    .InnerText.Trim();
-
-                            if (!string.IsNullOrEmpty(answer))
-                            {
-                                var stringChoice =
-                                    p.ChildNodes.FirstOrDefault(
-                                            x => x.Name.Equals("span", StringComparison.OrdinalIgnoreCase))?
-                                        .InnerText.Trim();
-                                var imageChoice =
-                                    p.ChildNodes.FirstOrDefault(
-                                            x => x.Name.Equals("img", StringComparison.OrdinalIgnoreCase))?
-                                        .GetAttributeValue("src", string.Empty);
-                                if (!string.IsNullOrEmpty(stringChoice) && imageChoice == null)
-                                {
-                                    itemBody.AnswerChoices.Add(answer, new BodyElement
-                                    {
-                                        Text = stringChoice
-                                    });
-                                }
-                                else if (!string.IsNullOrEmpty(imageChoice))
-                                {
-                                    var path = Path.Combine(new FileInfo(ExtractionSettings.Input).DirectoryName,
-                                        imageChoice.ReverseSlashes());
-                                    itemBody.AnswerChoices.Add(answer, new BodyElement
-                                    {
-                                        Image = Image.FromFile(path)
-                                    });
-                                }
-                            }
-                        }
-                        items.Last().Body = itemBody;
+                        result.Items.Last().Body = ItemBodyParser.Parse(nodes[i]);
                     }
                 }
             }
-            var test = items.SelectMany(x => x.Body.AnswerChoices).Where(x => x.Value.IsResource());
-            Console.ReadKey();
+            return result;
         }
     }
 }

@@ -59,9 +59,12 @@
     <Compile Include="Models\Source\StsMetadata.cs" />
     <Compile Include="Models\Source\Item\ItemMetadata.cs" />
     <Compile Include="Models\Source\Passage\PassageMetadata.cs" />
+    <Compile Include="Parsers\Source\ItemBodyParser.cs" />
     <Compile Include="Parsers\Source\ItemMetadataParser.cs" />
     <Compile Include="Parsers\Source\PassageParser.cs" />
+    <Compile Include="Parsers\Source\STSAssessment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\HtmlNodeUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
