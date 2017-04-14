@@ -4,17 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0B538924-A48D-4AB3-931A-9D12FFB196EC}</ProjectGuid>
+    <ProjectGuid>{313376A8-5874-4608-8E6D-E2123AEE3D26}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>STSParser</RootNamespace>
-    <AssemblyName>STSParser</AssemblyName>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>STSWriter</RootNamespace>
+    <AssemblyName>STSWriter</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -32,16 +29,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HtmlAgilityPack, Version=1.4.9.5, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
-      <HintPath>..\packages\HtmlAgilityPack.1.4.9.5\lib\Net45\HtmlAgilityPack.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -50,31 +40,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\BodyElement.cs" />
-    <Compile Include="Models\Item\ItemBody.cs" />
-    <Compile Include="Models\Passage\PassageBody.cs" />
-    <Compile Include="Parsers\DocumentParser.cs" />
-    <Compile Include="Models\Item\Item.cs" />
-    <Compile Include="Models\Passage\Passage.cs" />
-    <Compile Include="Models\StsMetadata.cs" />
-    <Compile Include="Models\Item\ItemMetadata.cs" />
-    <Compile Include="Models\Passage\PassageMetadata.cs" />
-    <Compile Include="Parsers\ItemBodyParser.cs" />
-    <Compile Include="Parsers\ItemMetadataParser.cs" />
-    <Compile Include="Parsers\PassageParser.cs" />
-    <Compile Include="Parsers\STSAssessment.cs" />
+    <Compile Include="ItemMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utilities\HtmlNodeUtilities.cs" />
+    <Compile Include="StimuliMapper.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\STSCommon\STSCommon.csproj">
       <Project>{67d48272-a82e-4a98-9986-de683df7c6f5}</Project>
       <Name>STSCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\STSParser\STSParser.csproj">
+      <Project>{0B538924-A48D-4AB3-931A-9D12FFB196EC}</Project>
+      <Name>STSParser</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using STSParser.Models.Source.Item;
-using STSParser.Models.Source.Passage;
+using STSParser.Models.Item;
+using STSParser.Models.Passage;
 
-namespace STSParser.Parsers.Source
+namespace STSParser.Parsers
 {
     public class STSAssessment
     {

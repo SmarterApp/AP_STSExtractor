@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using HtmlAgilityPack;
-using STSParser.Models.Source.Item;
+using STSParser.Models.Item;
 
-namespace STSParser.Parsers.Source
+namespace STSParser.Parsers
 {
     public class DocumentParser
     {

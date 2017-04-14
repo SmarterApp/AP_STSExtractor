@@ -1,11 +1,11 @@
 ﻿using System.Linq;
 using HtmlAgilityPack;
 using STSCommon.Utilities;
-using STSParser.Models.Source;
-using STSParser.Models.Source.Item;
-using STSParser.Models.Source.Passage;
+using STSParser.Models;
+using STSParser.Models.Item;
+using STSParser.Models.Passage;
 
-namespace STSParser.Parsers.Source
+namespace STSParser.Parsers
 {
     public static class ItemMetadataParser
     {
@@ -33,7 +33,7 @@ namespace STSParser.Parsers.Source
                     if (StringUtilities.MatchesCharacterInRange(correctAnswer, 'A', 'D') &&
                         metadata.ContainsKey("CorrectAnswer"))
                     {
-                        metadata.AddMetadata("CorrectAnswer", correctAnswer);
+                        metadata.AddMetadata("CorrectAnswer", correctAnswer.Trim());
                     }
                     i++;
                 }

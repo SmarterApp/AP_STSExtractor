@@ -2,7 +2,7 @@
 using System.Linq;
 using HtmlAgilityPack;
 using STSCommon.Utilities;
-using STSParser.Models.Source;
+using STSParser.Models;
 
 namespace STSParser.Utilities
 {

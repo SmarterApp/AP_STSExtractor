@@ -5,7 +5,8 @@ using System.Linq;
 using HtmlAgilityPack;
 using NLog;
 using STSCommon;
-using STSParser.Parsers.Source;
+using STSParser.Parsers;
+using STSWriter;
 
 namespace STSExtractor
 {
@@ -34,6 +35,16 @@ namespace STSExtractor
                         case "-h":
                             help = true;
                             Logger.Info("Application run in help mode");
+                            break;
+
+                        case "-b":
+                            ++i;
+                            ExtractionSettings.BankKey = args[i];
+                            break;
+
+                        case "-s":
+                            ++i;
+                            ExtractionSettings.ItemId = int.Parse(args[i]);
                             break;
 
                         case "-i":
@@ -65,13 +76,10 @@ namespace STSExtractor
                                 Logger.Error($"Output filename already set to: {oFilename}, cannot set to {args[i]}");
                                 throw new ArgumentException("Only one item output filename may be specified.");
                             }
-                            oFilename = Path.GetFullPath(args[i]);
-                            if (oFilename.EndsWith(".htm"))
-                            {
-                                oFilename = oFilename.Substring(0, oFilename.Length - 4);
-                                Logger.Info($"Output filename set to: {args[i]}");
-                                ExtractionSettings.Output = args[i];
-                            }
+                            oFilename = args[i];
+                            Logger.Info($"Output filename set to: {args[i]}");
+                            Directory.CreateDirectory(args[i]);
+                            ExtractionSettings.Output = args[i];
                         }
                             break;
 
@@ -99,7 +107,19 @@ namespace STSExtractor
                     var doc = new HtmlDocument();
                     doc.Load(inputFilenames.First());
                     var documentParser = new DocumentParser(doc);
-                    documentParser.Parse();
+                    var result = documentParser.Parse();
+                    result = AssignIdentifiers(result);
+                    var mappedDoc = result.Items.Select(ItemMapper.Map);
+                    mappedDoc.ToList()
+                        .ForEach(
+                            x =>
+                            {
+                                var fullItemId =
+                                    $"{ExtractionSettings.BankKey}-{x.SelectSingleNode(".//item").Attributes.GetNamedItem("id").Value}";
+                                var path = $"./{ExtractionSettings.Output}/Items/{fullItemId}";
+                                Directory.CreateDirectory(path);
+                                x.Save($"{path}/{fullItemId}.xml");
+                            });
                 }
             }
             catch
@@ -107,16 +127,27 @@ namespace STSExtractor
             {
                 Logger.Fatal(err);
                 Console.WriteLine();
-#if DEBUG
                 Console.WriteLine(err.ToString());
-#else
-                Console.WriteLine(err.Message);
-#endif
                 Console.ReadKey();
             }
 
             Console.Write("Press any key to exit.");
             Console.ReadKey(true);
+        }
+
+        private static STSAssessment AssignIdentifiers(STSAssessment assessment)
+        {
+            assessment.Items.ForEach(x => x.Id = ExtractionSettings.ItemId++.ToString());
+            assessment.Items.ForEach(x => x.Metadata.PurgeEmpties());
+            assessment.Passages.ForEach(x => x.Id = ExtractionSettings.ItemId++.ToString());
+            assessment.Passages.ForEach(x => x.Metadata.PurgeEmpties());
+            assessment.Items
+                .Where(x => !string.IsNullOrEmpty(x.Metadata["PassageCode"]))
+                .ToList()
+                .ForEach(x => x.PassageId = assessment.Passages
+                    .First(y => y.Metadata["PassageCode"].Trim()
+                        .Equals(x.Metadata["PassageCode"].Trim(), StringComparison.OrdinalIgnoreCase)).Id);
+            return assessment;
         }
     }
 }

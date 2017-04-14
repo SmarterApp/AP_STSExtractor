@@ -69,6 +69,10 @@
       <Project>{0b538924-a48d-4ab3-931a-9d12ffb196ec}</Project>
       <Name>STSParser</Name>
     </ProjectReference>
+    <ProjectReference Include="..\STSWriter\STSWriter.csproj">
+      <Project>{313376A8-5874-4608-8E6D-E2123AEE3D26}</Project>
+      <Name>STSWriter</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace STSParser.Models.Source.Item
+namespace STSParser.Models.Item
 {
     public class ItemBody
     {

@@ -1,6 +1,6 @@
 ﻿using HtmlAgilityPack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using STSParser.Parsers.Source;
+using STSParser.Parsers;
 
 namespace STSParser.Test.Parsers.Source
 {

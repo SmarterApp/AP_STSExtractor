@@ -1,10 +1,10 @@
 ﻿using System.Linq;
 using HtmlAgilityPack;
 using STSCommon.Utilities;
-using STSParser.Models.Source.Item;
+using STSParser.Models.Item;
 using STSParser.Utilities;
 
-namespace STSParser.Parsers.Source
+namespace STSParser.Parsers
 {
     public static class ItemBodyParser
     {

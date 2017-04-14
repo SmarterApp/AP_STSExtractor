@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace STSParser.Models.Source
+namespace STSParser.Models
 {
     public class BodyElement
     {

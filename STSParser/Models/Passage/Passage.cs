@@ -1,4 +1,4 @@
-﻿namespace STSParser.Models.Source.Passage
+﻿namespace STSParser.Models.Passage
 {
     public class Passage
     {
@@ -10,5 +10,6 @@
 
         public PassageMetadata Metadata { get; set; }
         public PassageBody Body { get; set; }
+        public string Id { get; set; }
     }
 }

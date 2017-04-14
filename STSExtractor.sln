@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "STSParser.Test", "STSParser
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "STSCommon", "STSCommon\STSCommon.csproj", "{67D48272-A82E-4A98-9986-DE683DF7C6F5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "STSWriter", "STSWriter\STSWriter.csproj", "{313376A8-5874-4608-8E6D-E2123AEE3D26}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{67D48272-A82E-4A98-9986-DE683DF7C6F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67D48272-A82E-4A98-9986-DE683DF7C6F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67D48272-A82E-4A98-9986-DE683DF7C6F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{313376A8-5874-4608-8E6D-E2123AEE3D26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{313376A8-5874-4608-8E6D-E2123AEE3D26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{313376A8-5874-4608-8E6D-E2123AEE3D26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{313376A8-5874-4608-8E6D-E2123AEE3D26}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
