@@ -115,7 +115,7 @@ namespace STSExtractor
                             x =>
                             {
                                 var fullItemId =
-                                    $"{ExtractionSettings.BankKey}-{x.SelectSingleNode(".//item").Attributes.GetNamedItem("id").Value}";
+                                    $"{ExtractionSettings.BankKey}-{x.SelectSingleNode(".//item")?.Attributes?.GetNamedItem("id").Value}";
                                 var path = $"./{ExtractionSettings.Output}/Items/{fullItemId}";
                                 Directory.CreateDirectory(path);
                                 x.Save($"{path}/{fullItemId}.xml");
