@@ -50,6 +50,7 @@
     <Compile Include="Utilities\ImageUtilities.cs" />
     <Compile Include="Utilities\StringExtensions.cs" />
     <Compile Include="Utilities\StringUtilities.cs" />
+    <Compile Include="Utilities\XmlDocumentUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

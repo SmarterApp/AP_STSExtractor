@@ -109,8 +109,9 @@ namespace STSExtractor
                     var documentParser = new DocumentParser(doc);
                     var result = documentParser.Parse();
                     result = AssignIdentifiers(result);
-                    var mappedDoc = result.Items.Select(ItemMapper.Map);
-                    mappedDoc.ToList()
+
+                    var mappedItems = result.Items.Select(ItemMapper.Map);
+                    mappedItems.ToList()
                         .ForEach(
                             x =>
                             {
@@ -120,6 +121,36 @@ namespace STSExtractor
                                 Directory.CreateDirectory(path);
                                 x.Save($"{path}/{fullItemId}.xml");
                             });
+
+                    var mappedItemMetadata = result.Items.Select(ItemMetadataMapper.Map);
+                    mappedItemMetadata.ToList().ForEach(x =>
+                    {
+                        var fullItemId =
+                            $"{ExtractionSettings.BankKey}-{x.SelectSingleNode(".//Identifier")?.InnerText}";
+                        var path = $"./{ExtractionSettings.Output}/Items/{fullItemId}";
+                        x.Save($"{path}/metadata.xml");
+                    });
+
+                    var mappedStimuli = result.Passages.Select(StimuliMapper.Map);
+                    mappedStimuli.ToList()
+                        .ForEach(
+                            x =>
+                            {
+                                var fullStimuliId =
+                                    $"{ExtractionSettings.BankKey}-{x.SelectSingleNode(".//passage")?.Attributes?.GetNamedItem("id").Value}";
+                                var path = $"./{ExtractionSettings.Output}/Stimuli/{fullStimuliId}";
+                                Directory.CreateDirectory(path);
+                                x.Save($"{path}/{fullStimuliId}.xml");
+                            });
+
+                    var mappedStimuliMetadata = result.Passages.Select(StimuliMetadataMapper.Map);
+                    mappedStimuliMetadata.ToList().ForEach(x =>
+                    {
+                        var fullStimulusId =
+                            $"{ExtractionSettings.BankKey}-{x.SelectSingleNode(".//Identifier")?.InnerText}";
+                        var path = $"./{ExtractionSettings.Output}/Stimuli/{fullStimulusId}";
+                        x.Save($"{path}/metadata.xml");
+                    });
                 }
             }
             catch

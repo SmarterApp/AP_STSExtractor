@@ -40,9 +40,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommonMapper.cs" />
     <Compile Include="ItemMapper.cs" />
+    <Compile Include="ItemMetadataMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StimuliMapper.cs" />
+    <Compile Include="StimuliMetadataMapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\STSCommon\STSCommon.csproj">

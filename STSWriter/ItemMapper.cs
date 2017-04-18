@@ -60,14 +60,9 @@ namespace STSWriter
                 "Explanation of Correct Answer"));
 
             var rationaleOptListElement = document.CreateElement("rationaleoptlist");
-            rationaleOptListElement.AppendChild(GenerateNameAndValueForParent(document, "rationale",
-                "Rationale for Option A"));
-            rationaleOptListElement.AppendChild(GenerateNameAndValueForParent(document, "rationale",
-                "Rationale for Option B"));
-            rationaleOptListElement.AppendChild(GenerateNameAndValueForParent(document, "rationale",
-                "Rationale for Option C"));
-            rationaleOptListElement.AppendChild(GenerateNameAndValueForParent(document, "rationale",
-                "Rationale for Option D"));
+            item.Body.AnswerChoices.Keys.ToList()
+                .ForEach(x => rationaleOptListElement.AppendChild(GenerateNameAndValueForParent(document, "rationale",
+                    $"Rationale for Option {x}")));
             contentElement.AppendChild(rationaleOptListElement);
 
             GenerateContent(document, item).ToList().ForEach(x => contentElement.AppendChild(x));
@@ -110,22 +105,21 @@ namespace STSWriter
         private static XmlElement GenerateFeedback(XmlDocument document)
         {
             var feedbackElement = document.CreateElement("feedback");
-            feedbackElement.InnerText = "<![CDATA[< p style = \"\" > &#xA0;</p>]]>";
+            feedbackElement.AppendChild(document.CreateCDataSection("< p style = \"\" > &#xA0;</p>"));
             return feedbackElement;
         }
 
         private static XmlElement GenerateIllustration(XmlDocument document, string itemId, int count)
         {
             var illustrationElement = document.CreateElement("illustration");
-            illustrationElement.InnerText = $"<![CDATA[<p style=\"\"><img src=\"{itemId}_{count}.png\"/></p>]]>";
+            illustrationElement.AppendChild(document.CreateCDataSection($"<p style=\"\"><img src=\"{itemId}_{count}.png\"/></p>"));
             return illustrationElement;
         }
 
         private static XmlElement GenerateStem(XmlDocument document, string content)
         {
             var stemElement = document.CreateElement("stem");
-            stemElement.InnerText =
-                $"<![CDATA[<p style=\"\">{content}</p>]]>";
+            stemElement.AppendChild(document.CreateCDataSection($"<p style=\"\">{content}</p>"));
             return stemElement;
         }
 
@@ -138,7 +132,7 @@ namespace STSWriter
             nameElement.InnerText = nameText;
 
             var valElement = document.CreateElement("val");
-            valElement.InnerText = $"<![CDATA[<p style=\"\">{valText}</p>]]>";
+            valElement.AppendChild(document.CreateCDataSection($"<p style=\"\">{valText}</p>"));
 
             parentElement.AppendChild(nameElement);
             parentElement.AppendChild(valElement);
@@ -150,48 +144,26 @@ namespace STSWriter
         {
             var attributeListElement = document.CreateElement("attriblist");
 
-            attributeListElement.AppendChild(GenerateAttribute(document, "itm_item_id", "Item: ITS ID", item.Id));
-            attributeListElement.AppendChild(GenerateAttribute(document, "itm_item_subject", "Item: Subject", "ELA"));
-            attributeListElement.AppendChild(GenerateAttribute(document, "itm_item_desc", "Item: Item Description"));
-            attributeListElement.AppendChild(GenerateAttribute(document, "itm_FTUse", "Fieldtest Use"));
-            attributeListElement.AppendChild(GenerateAttribute(document, "itm_OPUse", "Operational Use"));
-            attributeListElement.AppendChild(GenerateAttribute(document, "itm_att_Answer Key", "Item: Answer Key",
+            attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "itm_item_id", "Item: ITS ID", item.Id));
+            attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "itm_item_subject", "Item: Subject", "ELA"));
+            attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "itm_item_desc", "Item: Item Description"));
+            attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "itm_FTUse", "Fieldtest Use"));
+            attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "itm_OPUse", "Operational Use"));
+            attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "itm_att_Answer Key", "Item: Answer Key",
                 item.Metadata["CorrectAnswer"]));
-            attributeListElement.AppendChild(GenerateAttribute(document, "itm_att_Grade", "Item: Grade", "3", "3"));
-            attributeListElement.AppendChild(GenerateAttribute(document, "itm_att_Item Format", "Item: Item Format",
+            attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "itm_att_Grade", "Item: Grade", "3", "3"));
+            attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "itm_att_Item Format", "Item: Item Format",
                 "MC", "MC4 [1]"));
-            attributeListElement.AppendChild(GenerateAttribute(document, "itm_att_Page Layout", "Item: Page Layout",
+            attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "itm_att_Page Layout", "Item: Page Layout",
                 "21"));
-            attributeListElement.AppendChild(GenerateAttribute(document, "itm_att_Response Type", "Item: Response Type",
+            attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "itm_att_Response Type", "Item: Response Type",
                 "Vertical"));
-            attributeListElement.AppendChild(GenerateAttribute(document, "itm_att_Item Point", "Item: Item Point",
+            attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "itm_att_Item Point", "Item: Item Point",
                 "1 pt.", "1 Point"));
-            attributeListElement.AppendChild(GenerateAttribute(document, "stm_pass_id", "Stim: ITS ID",
+            attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "stm_pass_id", "Stim: ITS ID",
                 !string.IsNullOrEmpty(item.PassageId) ? item.PassageId : string.Empty));
 
             return attributeListElement;
-        }
-
-        private static XmlElement GenerateAttribute(XmlDocument document, string id, string name, string value = "",
-            string description = "")
-        {
-            var attribute = document.CreateElement("attrib");
-            attribute.SetAttribute("attid", id);
-
-            var nameElement = document.CreateElement("name");
-            nameElement.InnerText = name;
-
-            var valueElement = document.CreateElement("val");
-            valueElement.InnerText = value;
-
-            var descriptionElement = document.CreateElement("desc");
-            descriptionElement.InnerText = description;
-
-            attribute.AppendChild(nameElement);
-            attribute.AppendChild(valueElement);
-            attribute.AppendChild(descriptionElement);
-
-            return attribute;
         }
     }
 }
