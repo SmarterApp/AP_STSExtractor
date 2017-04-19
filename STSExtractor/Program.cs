@@ -46,7 +46,10 @@ namespace STSExtractor
                             ++i;
                             ExtractionSettings.ItemId = int.Parse(args[i]);
                             break;
-
+                        case "-g":
+                            ++i;
+                            ExtractionSettings.Grade = args[i];
+                            break;
                         case "-i":
                         {
                             ++i;
