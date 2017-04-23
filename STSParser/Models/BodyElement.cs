@@ -9,7 +9,7 @@ namespace STSParser.Models
 
         public bool IsResource()
         {
-            return Image != null && string.IsNullOrEmpty(Text);
+            return Image != null;
         }
     }
 }

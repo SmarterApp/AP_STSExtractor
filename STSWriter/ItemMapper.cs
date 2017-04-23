@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Xml;
 using STSCommon;
+using STSParser.Models;
 using STSParser.Models.Item;
 
 namespace STSWriter
@@ -77,7 +79,7 @@ namespace STSWriter
                 item.Body.Elements.Select(
                     bodyElement =>
                         bodyElement.IsResource()
-                            ? GenerateIllustration(document, item.Id, imageCount++)
+                            ? GenerateIllustration(document, item.Id, imageCount++, bodyElement)
                             : GenerateStem(document, bodyElement.Text)).ToList();
 
             var optionListElement = document.CreateElement("optionlist");
@@ -86,9 +88,8 @@ namespace STSWriter
                 var optionElement = document.CreateElement("option");
                 var optionNameElement = document.CreateElement("name");
                 optionNameElement.InnerText = $"Option {key}";
-                var optionValueElement = document.CreateElement("val");
-                optionValueElement = item.Body.AnswerChoices[key].IsResource()
-                    ? GenerateIllustration(document, item.Id, imageCount++)
+                var optionValueElement = item.Body.AnswerChoices[key].IsResource()
+                    ? GenerateIllustration(document, item.Id, imageCount++, item.Body.AnswerChoices[key])
                     : GenerateStem(document, item.Body.AnswerChoices[key].Text);
 
                 optionElement.AppendChild(optionNameElement);
@@ -109,10 +110,12 @@ namespace STSWriter
             return feedbackElement;
         }
 
-        private static XmlElement GenerateIllustration(XmlDocument document, string itemId, int count)
+        private static XmlElement GenerateIllustration(XmlDocument document, string itemId, int count, BodyElement element)
         {
             var illustrationElement = document.CreateElement("illustration");
             illustrationElement.AppendChild(document.CreateCDataSection($"<p style=\"\"><img src=\"{itemId}_{count}.png\"/></p>"));
+            var path = $"./{ExtractionSettings.Output}/Items/{ExtractionSettings.BankKey}-{itemId}";
+            element.Image.Save($"{path}/{itemId}_{count}.png", ImageFormat.Png);
             return illustrationElement;
         }
 
