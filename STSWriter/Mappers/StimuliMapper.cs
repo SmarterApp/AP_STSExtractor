@@ -1,7 +1,8 @@
-﻿using System.Drawing.Imaging;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Xml;
+using HtmlAgilityPack;
 using STSCommon;
 using STSParser.Models.Passage;
 
@@ -30,7 +31,13 @@ namespace STSWriter
             passageElement.AppendChild(GenerateAttribList(document, passage));
             passageElement.AppendChild(document.CreateElement("resourcelist"));
 
-            passageElement.AppendChild(GenerateContent(document, passage));
+            var spanishContent = GenerateContent(document, passage);
+            var englishContent = (XmlElement)
+                spanishContent.CloneNode(true);
+            englishContent.SetAttribute("language", "ENU");
+
+            passageElement.AppendChild(spanishContent);
+            passageElement.AppendChild(englishContent);
 
             return passageElement;
         }
@@ -60,12 +67,22 @@ namespace STSWriter
                 Directory.CreateDirectory(path);
                 x.Image.Save($"{path}/{passage.Id}_{i++}.png", ImageFormat.Png);
             });
+
             stemElement.AppendChild(
                 document.CreateCDataSection(
-                    $"{passage.Body.Elements.ToList().Select(x => x.IsResource() ? $"<img src={passage.Id}_{elementCount++}.png />" : x.Text).Aggregate((x, y) => $"{x}{y}")}>"));
+                    $"{passage.Body.Elements.ToList().Select(x => x.IsResource() ? UpdateImageReference(x.Text, $"{passage.Id}_{elementCount++}.png") : x.Text).Aggregate((x, y) => $"{x}{y}")}>"));
             contentElement.AppendChild(stemElement);
 
             return contentElement;
+        }
+
+        private static string UpdateImageReference(string imageElement, string replacementSource)
+        {
+            var document = new HtmlDocument();
+            document.LoadHtml(imageElement);
+            var imageNode = document.DocumentNode.SelectSingleNode("//img");
+            imageNode.SetAttributeValue("src", replacementSource);
+            return imageNode.OuterHtml;
         }
 
         private static XmlElement GenerateAttribList(XmlDocument document, Passage passage)

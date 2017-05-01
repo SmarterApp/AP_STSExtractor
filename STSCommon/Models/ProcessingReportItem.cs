@@ -1,4 +1,4 @@
-﻿namespace STSCommon.Models
+namespace STSCommon.Models
 {
     public class ProcessingReportItem
     {

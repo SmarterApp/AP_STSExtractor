@@ -13,7 +13,7 @@ namespace STSParser.Utilities
             var element = new BodyElement();
             var imgNode =
                 node.Descendants().FirstOrDefault(x => x.Name.Equals("img", StringComparison.OrdinalIgnoreCase));
-            element.Text = node.InnerText;
+            element.Text = node.OuterHtml;
             if (imgNode != null)
             {
                 element.Image = ImageUtilities.ImageFromParentHtmlNode(imgNode);
