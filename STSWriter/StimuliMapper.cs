@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Drawing.Imaging;
+using System.IO;
+using System.Linq;
 using System.Xml;
 using STSCommon;
 using STSParser.Models.Passage;
@@ -51,6 +53,13 @@ namespace STSWriter
 
             var stemElement = document.CreateElement("stem");
             var elementCount = 0;
+            passage.Body.Elements.Where(x => x.IsResource()).ToList().ForEach(x =>
+            {
+                var i = 0;
+                var path = $"./{ExtractionSettings.Output}/Stimuli/stim-{ExtractionSettings.BankKey}-{passage.Id}";
+                Directory.CreateDirectory(path);
+                x.Image.Save($"{path}/{passage.Id}_{i++}.png", ImageFormat.Png);
+            });
             stemElement.AppendChild(
                 document.CreateCDataSection(
                     $"{passage.Body.Elements.ToList().Select(x => x.IsResource() ? $"<img src={passage.Id}_{elementCount++}.png />" : x.Text).Aggregate((x, y) => $"{x}{y}")}>"));

@@ -111,13 +111,13 @@ namespace STSWriter
             return feedbackElement;
         }
 
-        private static XmlElement GenerateIllustration(XmlDocument document, string itemId, int count, BodyElement element)
+        private static XmlElement GenerateIllustration(XmlDocument document, string uniqueId, int count, BodyElement element)
         {
             var illustrationElement = document.CreateElement("illustration");
-            illustrationElement.AppendChild(document.CreateCDataSection($"<p style=\"\"><img src=\"{itemId}_{count}.png\"/></p>"));
-            var path = $"./{ExtractionSettings.Output}/Items/Item-{ExtractionSettings.BankKey}-{itemId}";
+            illustrationElement.AppendChild(document.CreateCDataSection($"<p style=\"\"><img src=\"{uniqueId}_{count}.png\"/></p>"));
+            var path = $"./{ExtractionSettings.Output}/Items/Item-{ExtractionSettings.BankKey}-{uniqueId}";
             Directory.CreateDirectory(path);
-            element.Image.Save($"{path}/{itemId}_{count}.png", ImageFormat.Png);
+            element.Image.Save($"{path}/{uniqueId}_{count}.png", ImageFormat.Png);
             return illustrationElement;
         }
 

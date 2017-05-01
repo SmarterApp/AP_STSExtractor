@@ -134,13 +134,6 @@ namespace STSExtractor
                         x.Save($"{path}/metadata.xml");
                     });
 
-                    var theEvent = new LogEventInfo(LogLevel.Error, string.Empty, "Pass my custom value");
-                    theEvent.Properties["Source"] = "test source";
-                    theEvent.Properties["Severity"] = "test severity";
-                    theEvent.Properties["Location"] = "test location";
-                    theEvent.Properties["Message"] = "test message";
-                    Logger.Log(theEvent);
-
                     var mappedStimuli = result.Passages.Select(StimuliMapper.Map);
                     mappedStimuli.ToList()
                         .ForEach(
