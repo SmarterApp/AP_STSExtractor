@@ -43,7 +43,13 @@ namespace STSWriter
             itemElement.AppendChild(document.CreateElement("resourcelist"));
             itemElement.AppendChild(document.CreateElement("statistic"));
 
-            itemElement.AppendChild(GenerateContentElement(document, item));
+            var spanishContent = GenerateContentElement(document, item);
+            var englishContent = (XmlElement)
+                spanishContent.CloneNode(true);
+            englishContent.SetAttribute("language", "ENU");
+
+            itemElement.AppendChild(spanishContent);
+            itemElement.AppendChild(englishContent);
 
             return itemElement;
         }
@@ -77,7 +83,7 @@ namespace STSWriter
         {
             var imageCount = 0;
             var result =
-                item.Body.Elements.Select(
+                item.Body.Elements.Where(x => x.IsResource() || !x.Text.Equals("&nbsp;")).Select(
                     bodyElement =>
                         bodyElement.IsResource()
                             ? GenerateIllustration(document, item.Id, imageCount++, bodyElement)
@@ -89,12 +95,16 @@ namespace STSWriter
                 var optionElement = document.CreateElement("option");
                 var optionNameElement = document.CreateElement("name");
                 optionNameElement.InnerText = $"Option {key}";
-                var optionValueElement = item.Body.AnswerChoices[key].IsResource()
+                var optionStemElement = item.Body.AnswerChoices[key].IsResource()
                     ? GenerateIllustration(document, item.Id, imageCount++, item.Body.AnswerChoices[key])
                     : GenerateStem(document, item.Body.AnswerChoices[key].Text);
+                var optionValueElement = item.Body.AnswerChoices[key].IsResource()
+                    ? GenerateValue(document, $"<p style=\"\"><img src=\"{item.Id}_{imageCount - 1}.png\"/></p>")
+                    : GenerateValue(document, item.Body.AnswerChoices[key].Text);
 
-                optionElement.AppendChild(optionNameElement);
                 optionElement.AppendChild(optionValueElement);
+                optionElement.AppendChild(optionNameElement);
+                optionElement.AppendChild(optionStemElement);
                 optionElement.AppendChild(GenerateFeedback(document));
 
                 optionListElement.AppendChild(optionElement);
@@ -128,6 +138,13 @@ namespace STSWriter
             var stemElement = document.CreateElement("stem");
             stemElement.AppendChild(document.CreateCDataSection($"<p style=\"\">{content}</p>"));
             return stemElement;
+        }
+
+        private static XmlElement GenerateValue(XmlDocument document, string content)
+        {
+            var valElement = document.CreateElement("val");
+            valElement.AppendChild(document.CreateCDataSection(content));
+            return valElement;
         }
 
         private static XmlElement GenerateNameAndValueForParent(XmlDocument document, string parentElementName,
