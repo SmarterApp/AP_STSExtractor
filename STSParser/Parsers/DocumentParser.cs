@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using HtmlAgilityPack;
+using STSParser.Models;
 using STSParser.Models.Item;
 
 namespace STSParser.Parsers
@@ -14,9 +15,9 @@ namespace STSParser.Parsers
 
         private HtmlDocument Navigator { get; }
 
-        public STSAssessment Parse()
+        public StsAssessment Parse()
         {
-            var result = new STSAssessment();
+            var result = new StsAssessment();
             foreach (var div in Navigator.DocumentNode.SelectNodes("//div"))
             {
                 var isItemMetadata = false;

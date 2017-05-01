@@ -5,6 +5,7 @@ using System.Linq;
 using HtmlAgilityPack;
 using NLog;
 using STSCommon;
+using STSCommon.Extensions;
 using STSParser.Parsers;
 using STSWriter;
 
@@ -107,52 +108,13 @@ namespace STSExtractor
                 }
                 else
                 {
-                    var doc = new HtmlDocument();
-                    doc.Load(inputFilenames.First());
-                    var documentParser = new DocumentParser(doc);
-                    var result = documentParser.Parse();
-                    result = AssignIdentifiers(result);
-
-                    var mappedItems = result.Items.Select(ItemMapper.Map);
-                    mappedItems.ToList()
-                        .ForEach(
-                            x =>
-                            {
-                                var fullItemId =
-                                    $"{ExtractionSettings.BankKey}-{x.SelectSingleNode(".//item")?.Attributes?.GetNamedItem("id").Value}";
-                                var path = $"./{ExtractionSettings.Output}/Items/Item-{fullItemId}";
-                                Directory.CreateDirectory(path);
-                                x.Save($"{path}/item-{fullItemId}.xml");
-                            });
-
-                    var mappedItemMetadata = result.Items.Select(ItemMetadataMapper.Map);
-                    mappedItemMetadata.ToList().ForEach(x =>
+                    inputFilenames.ToList().ForEach(x =>
                     {
-                        var fullItemId =
-                            $"{ExtractionSettings.BankKey}-{x.SelectSingleNode(".//Identifier")?.InnerText}";
-                        var path = $"./{ExtractionSettings.Output}/Items/Item-{fullItemId}";
-                        x.Save($"{path}/metadata.xml");
-                    });
-
-                    var mappedStimuli = result.Passages.Select(StimuliMapper.Map);
-                    mappedStimuli.ToList()
-                        .ForEach(
-                            x =>
-                            {
-                                var fullStimuliId =
-                                    $"{ExtractionSettings.BankKey}-{x.SelectSingleNode(".//passage")?.Attributes?.GetNamedItem("id").Value}";
-                                var path = $"./{ExtractionSettings.Output}/Stimuli/stim-{fullStimuliId}";
-                                Directory.CreateDirectory(path);
-                                x.Save($"{path}/stim-{fullStimuliId}.xml");
-                            });
-
-                    var mappedStimuliMetadata = result.Passages.Select(StimuliMetadataMapper.Map);
-                    mappedStimuliMetadata.ToList().ForEach(x =>
-                    {
-                        var fullStimulusId =
-                            $"{ExtractionSettings.BankKey}-{x.SelectSingleNode(".//Identifier")?.InnerText}";
-                        var path = $"./{ExtractionSettings.Output}/Stimuli/stim-{fullStimulusId}";
-                        x.Save($"{path}/metadata.xml");
+                        var documentParser = new DocumentParser(new HtmlDocument().LoadFromPath(x));
+                        var result = documentParser
+                            .Parse()
+                            .AssignIdentifiers();
+                        StsAssessmentWriter.Write(result);
                     });
                 }
             }
@@ -167,21 +129,6 @@ namespace STSExtractor
 
             Console.Write("Press any key to exit.");
             Console.ReadKey(true);
-        }
-
-        private static STSAssessment AssignIdentifiers(STSAssessment assessment)
-        {
-            assessment.Items.ForEach(x => x.Id = ExtractionSettings.ItemId++.ToString());
-            assessment.Items.ForEach(x => x.Metadata.PurgeEmpties());
-            assessment.Passages.ForEach(x => x.Id = ExtractionSettings.ItemId++.ToString());
-            assessment.Passages.ForEach(x => x.Metadata.PurgeEmpties());
-            assessment.Items
-                .Where(x => !string.IsNullOrEmpty(x.Metadata["PassageCode"]))
-                .ToList()
-                .ForEach(x => x.PassageId = assessment.Passages
-                    .First(y => y.Metadata["PassageCode"].Trim()
-                        .Equals(x.Metadata["PassageCode"].Trim(), StringComparison.OrdinalIgnoreCase)).Id);
-            return assessment;
         }
     }
 }

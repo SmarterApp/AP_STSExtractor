@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\HtmlDocumentExtensions.cs" />
     <Compile Include="Extensions\LoggerExtenstions.cs" />
     <Compile Include="ExtractionSettings.cs" />
     <Compile Include="Models\ErrorReportItem.cs" />

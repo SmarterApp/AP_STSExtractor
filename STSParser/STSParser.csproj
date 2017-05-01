@@ -62,7 +62,7 @@
     <Compile Include="Parsers\ItemBodyParser.cs" />
     <Compile Include="Parsers\ItemMetadataParser.cs" />
     <Compile Include="Parsers\PassageParser.cs" />
-    <Compile Include="Parsers\STSAssessment.cs" />
+    <Compile Include="Models\STSAssessment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\HtmlNodeUtilities.cs" />
   </ItemGroup>
