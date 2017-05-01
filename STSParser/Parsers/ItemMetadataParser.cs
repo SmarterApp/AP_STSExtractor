@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using HtmlAgilityPack;
+using STSCommon.Extensions;
 using STSCommon.Utilities;
 using STSParser.Models;
 using STSParser.Models.Item;

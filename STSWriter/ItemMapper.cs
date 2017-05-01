@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Xml;
 using STSCommon;
@@ -114,7 +115,8 @@ namespace STSWriter
         {
             var illustrationElement = document.CreateElement("illustration");
             illustrationElement.AppendChild(document.CreateCDataSection($"<p style=\"\"><img src=\"{itemId}_{count}.png\"/></p>"));
-            var path = $"./{ExtractionSettings.Output}/Items/{ExtractionSettings.BankKey}-{itemId}";
+            var path = $"./{ExtractionSettings.Output}/Items/Item-{ExtractionSettings.BankKey}-{itemId}";
+            Directory.CreateDirectory(path);
             element.Image.Save($"{path}/{itemId}_{count}.png", ImageFormat.Png);
             return illustrationElement;
         }
@@ -154,7 +156,7 @@ namespace STSWriter
             attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "itm_OPUse", "Operational Use"));
             attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "itm_att_Answer Key", "Item: Answer Key",
                 item.Metadata["CorrectAnswer"]));
-            attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "itm_att_Grade", "Item: Grade", "3", "3"));
+            attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "itm_att_Grade", "Item: Grade", ExtractionSettings.Grade, ExtractionSettings.Grade));
             attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "itm_att_Item Format", "Item: Item Format",
                 "MC", "MC4 [1]"));
             attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "itm_att_Page Layout", "Item: Page Layout",

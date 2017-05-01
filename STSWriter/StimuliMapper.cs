@@ -41,18 +41,19 @@ namespace STSWriter
             contentElement.SetAttribute("approvedVersion", "0");
 
             var titleElement = document.CreateElement("title");
-            titleElement.InnerText = "<![CDATA[&#xA0;]]>";
+            titleElement.AppendChild(document.CreateCDataSection("&#xA0;"));
 
-            var authorElement = document.CreateElement("title");
-            authorElement.InnerText = "<![CDATA[&#xA0;]]>";
+            var authorElement = document.CreateElement("author");
+            authorElement.AppendChild(document.CreateCDataSection("&#xA0;"));
 
             contentElement.AppendChild(titleElement);
             contentElement.AppendChild(authorElement);
 
             var stemElement = document.CreateElement("stem");
             var elementCount = 0;
-            stemElement.InnerText =
-                $"<![CDATA[{passage.Body.Elements.ToList().Select(x => x.IsResource() ? $"<img src={passage.Id}_{elementCount++} />" : x.Text).Aggregate((x, y) => $"{x}{y}")}]]>";
+            stemElement.AppendChild(
+                document.CreateCDataSection(
+                    $"{passage.Body.Elements.ToList().Select(x => x.IsResource() ? $"<img src={passage.Id}_{elementCount++}.png />" : x.Text).Aggregate((x, y) => $"{x}{y}")}>"));
             contentElement.AppendChild(stemElement);
 
             return contentElement;

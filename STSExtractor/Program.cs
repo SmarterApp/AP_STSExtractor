@@ -120,9 +120,9 @@ namespace STSExtractor
                             {
                                 var fullItemId =
                                     $"{ExtractionSettings.BankKey}-{x.SelectSingleNode(".//item")?.Attributes?.GetNamedItem("id").Value}";
-                                var path = $"./{ExtractionSettings.Output}/Items/{fullItemId}";
+                                var path = $"./{ExtractionSettings.Output}/Items/Item-{fullItemId}";
                                 Directory.CreateDirectory(path);
-                                x.Save($"{path}/{fullItemId}.xml");
+                                x.Save($"{path}/item-{fullItemId}.xml");
                             });
 
                     var mappedItemMetadata = result.Items.Select(ItemMetadataMapper.Map);
@@ -130,9 +130,16 @@ namespace STSExtractor
                     {
                         var fullItemId =
                             $"{ExtractionSettings.BankKey}-{x.SelectSingleNode(".//Identifier")?.InnerText}";
-                        var path = $"./{ExtractionSettings.Output}/Items/{fullItemId}";
+                        var path = $"./{ExtractionSettings.Output}/Items/Item-{fullItemId}";
                         x.Save($"{path}/metadata.xml");
                     });
+
+                    var theEvent = new LogEventInfo(LogLevel.Error, string.Empty, "Pass my custom value");
+                    theEvent.Properties["Source"] = "test source";
+                    theEvent.Properties["Severity"] = "test severity";
+                    theEvent.Properties["Location"] = "test location";
+                    theEvent.Properties["Message"] = "test message";
+                    Logger.Log(theEvent);
 
                     var mappedStimuli = result.Passages.Select(StimuliMapper.Map);
                     mappedStimuli.ToList()
@@ -141,9 +148,9 @@ namespace STSExtractor
                             {
                                 var fullStimuliId =
                                     $"{ExtractionSettings.BankKey}-{x.SelectSingleNode(".//passage")?.Attributes?.GetNamedItem("id").Value}";
-                                var path = $"./{ExtractionSettings.Output}/Stimuli/{fullStimuliId}";
+                                var path = $"./{ExtractionSettings.Output}/Stimuli/stim-{fullStimuliId}";
                                 Directory.CreateDirectory(path);
-                                x.Save($"{path}/{fullStimuliId}.xml");
+                                x.Save($"{path}/stim-{fullStimuliId}.xml");
                             });
 
                     var mappedStimuliMetadata = result.Passages.Select(StimuliMetadataMapper.Map);
@@ -151,7 +158,7 @@ namespace STSExtractor
                     {
                         var fullStimulusId =
                             $"{ExtractionSettings.BankKey}-{x.SelectSingleNode(".//Identifier")?.InnerText}";
-                        var path = $"./{ExtractionSettings.Output}/Stimuli/{fullStimulusId}";
+                        var path = $"./{ExtractionSettings.Output}/Stimuli/stim-{fullStimulusId}";
                         x.Save($"{path}/metadata.xml");
                     });
                 }

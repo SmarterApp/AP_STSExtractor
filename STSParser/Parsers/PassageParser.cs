@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using HtmlAgilityPack;
+using STSCommon.Extensions;
 using STSCommon.Utilities;
 using STSParser.Models.Passage;
 using STSParser.Utilities;

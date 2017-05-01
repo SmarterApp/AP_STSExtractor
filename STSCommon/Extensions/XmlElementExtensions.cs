@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Xml;
 
-namespace STSCommon.Utilities
+namespace STSCommon.Extensions
 {
     public static class XmlElementExtensions
     {

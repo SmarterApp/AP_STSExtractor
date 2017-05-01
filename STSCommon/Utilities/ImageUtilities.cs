@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.IO;
 using HtmlAgilityPack;
+using STSCommon.Extensions;
 
 namespace STSCommon.Utilities
 {

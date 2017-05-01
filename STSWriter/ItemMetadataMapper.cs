@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Xml;
 using STSCommon;
+using STSCommon.Extensions;
 using STSCommon.Utilities;
 using STSParser.Models.Item;
 
@@ -20,9 +21,11 @@ namespace STSWriter
 
         private static XmlElement GenerateSmarterAppMetadata(XmlDocument document, Item item)
         {
-            var smarterAppMetadata = document.CreateElement("smarterAppMetadata")
+            var smarterAppMetadata = document.CreateElement("smarterAppMetadata");
+            smarterAppMetadata.SetAttribute("xmlns", "http://www.smarterapp.org/ns/1/assessment_item_metadata");
+            smarterAppMetadata
                 .AppendChild(document, "Identifier", item.Id)
-                .AppendChild(document, "Subject", "Spanish")
+                .AppendChild(document, "Subject", "ELA")
                 .AppendChild(document, "Version", "1.0")
                 .AppendChild(document, "AssociatedStimulus", item.PassageId)
                 .AppendChild(document, "ItemAuthorIdentifier")
@@ -35,20 +38,21 @@ namespace STSWriter
                 .AppendChild(document, "IntendedGrade", ExtractionSettings.Grade)
                 .AppendChild(document, "DepthOfKnowledge", item.Metadata["DOK"])
                 .AppendChild(document, "TargetAssessmentType")
-                .AppendChild(document, "InteractionType")
+                .AppendChild(document, "InteractionType", "MC")
                 .AppendChild(document, "EducationalDifficulty")
-                .AppendChild(document, "MaximumNumberOfPoints")
+                .AppendChild(document, "MaximumNumberOfPoints", "1")
                 .AppendChild(document, "EvidenceStatement",
                     $"{item.Metadata["StandardCode"]} {item.Metadata["ReportCategory"]} {item.Metadata["Standard"]}")
                 .AppendChild(document, "SufficientEvidenceOfClaim")
                 .AppendChild(document, "BrailleType")
                 .AppendChild(document, "MinimumGrade", ExtractionSettings.Grade)
                 .AppendChild(document, "MaximumGrade", ExtractionSettings.Grade)
-                .AppendChild(document, "ScorePoints")
+                .AppendChild(document, "ScorePoints", "\"0,1\"")
                 .AppendChild(document, "StimulusName")
                 .AppendChild(document, "StimulusType")
                 .AppendChild(document, "AssociatedTutorial")
-                .AppendChild(document, "Language", "ESN")
+                .AppendChild(document, "Language", "spa")
+                .AppendChild(document, "ScoringEngine", "Automatic with Key")
                 .AppendChild(document, "ExternalItemId", item.Metadata["ItemCode"]);
             smarterAppMetadata.AppendChild(GenerateStandardPublication(document, item));
             smarterAppMetadata.AppendChild(GenerateIrtDimension(document));
