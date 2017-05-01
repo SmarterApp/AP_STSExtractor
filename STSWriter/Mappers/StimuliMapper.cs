@@ -81,6 +81,7 @@ namespace STSWriter
             var document = new HtmlDocument();
             document.LoadHtml(imageElement);
             var imageNode = document.DocumentNode.SelectSingleNode("//img");
+            imageNode.Attributes.RemoveAll();
             imageNode.SetAttributeValue("src", replacementSource);
             return imageNode.OuterHtml;
         }
