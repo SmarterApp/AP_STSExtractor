@@ -54,6 +54,7 @@
     <Compile Include="Models\ErrorReportItem.cs" />
     <Compile Include="Models\ProcessingReportItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\ApplicationSettings.cs" />
     <Compile Include="Utilities\ImageUtilities.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Utilities\StringUtilities.cs" />

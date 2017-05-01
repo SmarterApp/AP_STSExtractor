@@ -6,6 +6,8 @@ using HtmlAgilityPack;
 using NLog;
 using STSCommon;
 using STSCommon.Extensions;
+using STSCommon.Models;
+using STSCommon.Utilities;
 using STSParser.Parsers;
 using STSWriter;
 
@@ -20,12 +22,14 @@ namespace STSExtractor
 
         private static void Main(string[] args)
         {
-            Logger.Info(string.Concat(Enumerable.Repeat("-", 60)));
-            Logger.Info("STS Extractor Initialized");
+            Logger.Debug(string.Concat(Enumerable.Repeat("-", 60)));
+            Logger.Debug("STS Extractor Initialized");
             try
             {
                 var inputFilenames = new List<string>();
-                string oFilename = null;
+                string outputFilename = null;
+                var applicationSettings = new ApplicationSettings();
+                applicationSettings.Initialize();
 
                 var help = false;
 
@@ -35,12 +39,21 @@ namespace STSExtractor
                     {
                         case "-h":
                             help = true;
-                            Logger.Info("Application run in help mode");
+                            Logger.Debug("Application run in help mode");
                             break;
 
                         case "-b":
                             ++i;
                             ExtractionSettings.BankKey = args[i];
+                            if (applicationSettings["ValidBankKeys"].Split(',').All(x => !x.Equals(args[i])))
+                            {
+                                Logger.LogError(new ErrorReportItem
+                                    {
+                                        Location = "app.config",
+                                        Severity = LogLevel.Warn
+                                    },
+                                    $"BankKey value {args[i]} is not verified. Client with associated Bank Key must be present in the TDS database for items generated using this key to display property.");
+                            }
                             break;
 
                         case "-s":
@@ -75,12 +88,13 @@ namespace STSExtractor
                                 throw new ArgumentException(
                                     "Invalid command line. '-o' option not followed by filename.");
                             }
-                            if (oFilename != null)
+                            if (outputFilename != null)
                             {
-                                Logger.Error($"Output filename already set to: {oFilename}, cannot set to {args[i]}");
+                                Logger.Error(
+                                    $"Output filename already set to: {outputFilename}, cannot set to {args[i]}");
                                 throw new ArgumentException("Only one item output filename may be specified.");
                             }
-                            oFilename = args[i];
+                            outputFilename = args[i];
                             Logger.Info($"Output filename set to: {args[i]}");
                             Directory.CreateDirectory(args[i]);
                             ExtractionSettings.Output = args[i];
@@ -94,17 +108,38 @@ namespace STSExtractor
                     }
                 }
 
-
                 if (help || args.Length == 0)
                 {
                     Console.WriteLine(HelpMessage);
                 }
-                else if (inputFilenames.Count == 0 || oFilename == null)
+                else if (inputFilenames.Count == 0 || outputFilename == null)
                 {
                     Logger.Error(
                         "Invalid command line. One output filename and at least one input filename must be specified.");
-                    throw new ArgumentException(
-                        "Invalid command line. One output filename and at least one input filename must be specified.");
+                }
+                else if (string.IsNullOrEmpty(ExtractionSettings.ItemId.ToString()))
+                {
+                    Logger.LogError(new ErrorReportItem
+                    {
+                        Location = "Application input",
+                        Severity = LogLevel.Fatal
+                    }, "This application requires a seed ItemId as a command line parameter following flag '-s'");
+                }
+                else if (string.IsNullOrEmpty(ExtractionSettings.BankKey))
+                {
+                    Logger.LogError(new ErrorReportItem
+                    {
+                        Location = "Application input",
+                        Severity = LogLevel.Fatal
+                    }, "This application requires a BankKey as a command line parameter following flag '-b'");
+                }
+                else if (string.IsNullOrEmpty(ExtractionSettings.ItemId.ToString()))
+                {
+                    Logger.LogError(new ErrorReportItem
+                    {
+                        Location = "Application input",
+                        Severity = LogLevel.Fatal
+                    }, "This application requires a valid Grade as a command line parameter following flag '-g'");
                 }
                 else
                 {
@@ -118,17 +153,19 @@ namespace STSExtractor
                     });
                 }
             }
-            catch
-                (Exception err)
+            catch (Exception e)
             {
-                Logger.Fatal(err);
-                Console.WriteLine();
-                Console.WriteLine(err.ToString());
-                Console.ReadKey();
+                Logger.LogError(new ErrorReportItem
+                {
+                    Location = e.Source,
+                    Severity = LogLevel.Fatal
+                }, $"A fatal error occurred: {e.Message}");
             }
-
-            Console.Write("Press any key to exit.");
-            Console.ReadKey(true);
+            finally
+            {
+                Console.Write("Press any key to exit.");
+                Console.ReadKey(true);
+            }
         }
     }
 }
