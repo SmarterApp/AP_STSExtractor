@@ -6,7 +6,8 @@ namespace STSCommon.Extensions
 {
     public static class XmlElementExtensions
     {
-        public static XmlElement AppendChild(this XmlElement element, XmlDocument document, string name, string value = "",
+        public static XmlElement AppendChild(this XmlElement element, XmlDocument document, string name,
+            string value = "",
             IDictionary<string, string> attributes = null)
         {
             var childElement = document.CreateElement(name);

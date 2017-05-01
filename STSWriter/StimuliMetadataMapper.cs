@@ -8,7 +8,7 @@ namespace STSWriter
         public static XmlDocument Map(Passage passage)
         {
             var document = new XmlDocument();
-            var metadataElement = (XmlElement)document.AppendChild(document.CreateElement("metadata"));
+            var metadataElement = (XmlElement) document.AppendChild(document.CreateElement("metadata"));
             metadataElement.AppendChild(GenerateSmarterAppMetadata(document, passage));
 
             return document;

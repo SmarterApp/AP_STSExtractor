@@ -68,7 +68,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Resources\STS_RLASimulatedItems.htm" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\STSParser\STSParser.csproj">

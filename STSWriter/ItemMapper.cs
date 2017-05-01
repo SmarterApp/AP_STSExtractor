@@ -111,10 +111,12 @@ namespace STSWriter
             return feedbackElement;
         }
 
-        private static XmlElement GenerateIllustration(XmlDocument document, string uniqueId, int count, BodyElement element)
+        private static XmlElement GenerateIllustration(XmlDocument document, string uniqueId, int count,
+            BodyElement element)
         {
             var illustrationElement = document.CreateElement("illustration");
-            illustrationElement.AppendChild(document.CreateCDataSection($"<p style=\"\"><img src=\"{uniqueId}_{count}.png\"/></p>"));
+            illustrationElement.AppendChild(
+                document.CreateCDataSection($"<p style=\"\"><img src=\"{uniqueId}_{count}.png\"/></p>"));
             var path = $"./{ExtractionSettings.Output}/Items/Item-{ExtractionSettings.BankKey}-{uniqueId}";
             Directory.CreateDirectory(path);
             element.Image.Save($"{path}/{uniqueId}_{count}.png", ImageFormat.Png);
@@ -149,21 +151,30 @@ namespace STSWriter
         {
             var attributeListElement = document.CreateElement("attriblist");
 
-            attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "itm_item_id", "Item: ITS ID", item.Id));
-            attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "itm_item_subject", "Item: Subject", "ELA"));
-            attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "itm_item_desc", "Item: Item Description"));
+            attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "itm_item_id", "Item: ITS ID",
+                item.Id));
+            attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "itm_item_subject",
+                "Item: Subject", "ELA"));
+            attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "itm_item_desc",
+                "Item: Item Description"));
             attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "itm_FTUse", "Fieldtest Use"));
             attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "itm_OPUse", "Operational Use"));
-            attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "itm_att_Answer Key", "Item: Answer Key",
+            attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "itm_att_Answer Key",
+                "Item: Answer Key",
                 item.Metadata["CorrectAnswer"]));
-            attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "itm_att_Grade", "Item: Grade", ExtractionSettings.Grade, ExtractionSettings.Grade));
-            attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "itm_att_Item Format", "Item: Item Format",
+            attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "itm_att_Grade", "Item: Grade",
+                ExtractionSettings.Grade, ExtractionSettings.Grade));
+            attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "itm_att_Item Format",
+                "Item: Item Format",
                 "MC", "MC4 [1]"));
-            attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "itm_att_Page Layout", "Item: Page Layout",
+            attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "itm_att_Page Layout",
+                "Item: Page Layout",
                 "21"));
-            attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "itm_att_Response Type", "Item: Response Type",
+            attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "itm_att_Response Type",
+                "Item: Response Type",
                 "Vertical"));
-            attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "itm_att_Item Point", "Item: Item Point",
+            attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "itm_att_Item Point",
+                "Item: Item Point",
                 "1 pt.", "1 Point"));
             attributeListElement.AppendChild(CommonMapper.GenerateAttribute(document, "stm_pass_id", "Stim: ITS ID",
                 !string.IsNullOrEmpty(item.PassageId) ? item.PassageId : string.Empty));

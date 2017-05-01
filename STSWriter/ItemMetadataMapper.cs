@@ -3,7 +3,6 @@ using System.Linq;
 using System.Xml;
 using STSCommon;
 using STSCommon.Extensions;
-using STSCommon.Utilities;
 using STSParser.Models.Item;
 
 namespace STSWriter
