@@ -6,7 +6,7 @@ using HtmlAgilityPack;
 using STSCommon;
 using STSParser.Models.Passage;
 
-namespace STSWriter
+namespace STSWriter.Mappers
 {
     public static class StimuliMapper
     {

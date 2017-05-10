@@ -24,9 +24,10 @@ namespace STSParser.Parsers
                     itemBody.AnswerChoices.Add(answer, HtmlNodeUtilities.BodyElementFromNode(p));
                     if (!itemBody.AnswerChoices[answer].IsResource())
                     {
-                        var text = itemBody.AnswerChoices[answer].Text;
-                        text = text.Trim().Substring(1).RestrictToSingleWhiteSpace();
-                        itemBody.AnswerChoices[answer].Text = text;
+                        var document = new HtmlDocument();
+                        document.LoadHtml(itemBody.AnswerChoices[answer].Text);
+                        var span = document.DocumentNode.SelectNodes("//span").Last();
+                        itemBody.AnswerChoices[answer].Text = span.OuterHtml.Trim();
                     }
                 }
                 else

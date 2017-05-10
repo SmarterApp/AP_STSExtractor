@@ -5,7 +5,7 @@ using STSCommon;
 using STSCommon.Extensions;
 using STSParser.Models.Item;
 
-namespace STSWriter
+namespace STSWriter.Mappers
 {
     public static class ItemMetadataMapper
     {

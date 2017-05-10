@@ -1,6 +1,6 @@
 ﻿using System.Xml;
 
-namespace STSWriter
+namespace STSWriter.Mappers
 {
     public static class CommonMapper
     {

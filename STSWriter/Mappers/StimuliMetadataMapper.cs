@@ -1,7 +1,7 @@
 ﻿using System.Xml;
 using STSParser.Models.Passage;
 
-namespace STSWriter
+namespace STSWriter.Mappers
 {
     public static class StimuliMetadataMapper
     {

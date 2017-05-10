@@ -7,7 +7,7 @@ using STSCommon;
 using STSParser.Models;
 using STSParser.Models.Item;
 
-namespace STSWriter
+namespace STSWriter.Mappers
 {
     public static class ItemMapper
     {
@@ -83,7 +83,7 @@ namespace STSWriter
         {
             var imageCount = 0;
             var result =
-                item.Body.Elements.Where(x => x.IsResource() || !x.Text.Equals("&nbsp;")).Select(
+                item.Body.Elements.Where(x => x.IsResource() || !x.Text.Equals("<p class=\"MsoNormal\">&nbsp;</p>")).Select(
                     bodyElement =>
                         bodyElement.IsResource()
                             ? GenerateIllustration(document, item.Id, imageCount++, bodyElement)

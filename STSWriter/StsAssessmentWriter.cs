@@ -2,6 +2,7 @@
 using System.Linq;
 using STSCommon;
 using STSParser.Models;
+using STSWriter.Mappers;
 
 namespace STSWriter
 {
