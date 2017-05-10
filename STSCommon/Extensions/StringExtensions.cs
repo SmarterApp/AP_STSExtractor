@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.RegularExpressions;
+using HtmlAgilityPack;
 
 namespace STSCommon.Extensions
 {
@@ -26,6 +27,18 @@ namespace STSCommon.Extensions
         public static string ReverseSlashes(this string str)
         {
             return str.Replace('/', '\\');
+        }
+
+
+        public static string ProduceImgElementWithSourceFromStringElement(this string imageElement,
+            string replacementSource)
+        {
+            var document = new HtmlDocument();
+            document.LoadHtml(imageElement);
+            var imageNode = document.DocumentNode.SelectSingleNode("//img");
+            imageNode.Attributes.RemoveAll();
+            imageNode.SetAttributeValue("src", replacementSource);
+            return imageNode.OuterHtml;
         }
     }
 }
