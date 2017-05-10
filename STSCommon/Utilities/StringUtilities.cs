@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace STSParser.Utilities
+namespace STSCommon.Utilities
 {
     public static class StringUtilities
     {

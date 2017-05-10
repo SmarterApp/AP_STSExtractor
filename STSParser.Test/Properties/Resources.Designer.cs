@@ -59,34 +59,5 @@ namespace STSParser.Test.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;html&gt;
-        ///
-        ///&lt;head&gt;
-        ///&lt;meta http-equiv=Content-Type content=&quot;text/html; charset=windows-1252&quot;&gt;
-        ///&lt;meta name=Generator content=&quot;Microsoft Word 15 (filtered)&quot;&gt;
-        ///&lt;style&gt;
-        ///&lt;!--
-        /// /* Font Definitions */
-        /// @font-face
-        ///	{font-family:Helvetica;
-        ///	panose-1:2 11 6 4 2 2 2 2 2 4;}
-        ///@font-face
-        ///	{font-family:&quot;Cambria Math&quot;;
-        ///	panose-1:2 4 5 3 5 4 6 3 2 4;}
-        ///@font-face
-        ///	{font-family:Times;
-        ///	panose-1:2 2 6 3 5 4 5 2 3 4;}
-        ///@font-face
-        ///	{font-family:&quot;Open Sans&quot;;}
-        /// /* Style Definitions */
-        /// p.MsoNormal, li.MsoNormal, div.Mso [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string STS_RLASimulatedItems {
-            get {
-                return ResourceManager.GetString("STS_RLASimulatedItems", resourceCulture);
-            }
-        }
     }
 }

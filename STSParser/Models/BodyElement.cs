@@ -1,8 +1,6 @@
-﻿
+﻿using System.Drawing;
 
-using System.Drawing;
-
-namespace STSParser.Models.Source
+namespace STSParser.Models
 {
     public class BodyElement
     {
@@ -11,7 +9,7 @@ namespace STSParser.Models.Source
 
         public bool IsResource()
         {
-            return Image != null && string.IsNullOrEmpty(Text);
+            return Image != null;
         }
     }
 }

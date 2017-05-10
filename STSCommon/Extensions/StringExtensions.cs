@@ -1,7 +1,7 @@
-﻿using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
-namespace STSParser.Utilities
+namespace STSCommon.Extensions
 {
     public static class StringExtensions
     {
@@ -16,6 +16,16 @@ namespace STSParser.Utilities
                 }
             }
             return sb.ToString();
+        }
+
+        public static string RestrictToSingleWhiteSpace(this string str)
+        {
+            return Regex.Replace(Regex.Replace(str, @"\s+", " "), @"(\n+|\t+|\r+)", string.Empty).Trim();
+        }
+
+        public static string ReverseSlashes(this string str)
+        {
+            return str.Replace('/', '\\');
         }
     }
 }
