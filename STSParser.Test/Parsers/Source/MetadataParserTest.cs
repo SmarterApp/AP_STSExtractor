@@ -1,15 +1,13 @@
 ﻿using HtmlAgilityPack;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using STSParser.Parsers;
 
 namespace STSParser.Test.Parsers.Source
 {
-    [TestClass]
+    [TestFixture]
     public class MetadataParserTest
     {
-        public HtmlNode ItemMetadataTable { get; set; }
-
-        [TestInitialize]
+        [SetUp]
         public void Setup()
         {
             ItemMetadataTable = HtmlNode.CreateNode(
@@ -122,7 +120,9 @@ namespace STSParser.Test.Parsers.Source
             </table>");
         }
 
-        [TestMethod]
+        public HtmlNode ItemMetadataTable { get; set; }
+
+        [Test]
         public void ValidItemTableProducesCorrectMetadata()
         {
             // Arrange

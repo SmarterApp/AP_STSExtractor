@@ -83,11 +83,12 @@ namespace STSWriter.Mappers
         {
             var imageCount = 0;
             var result =
-                item.Body.Elements.Where(x => x.IsResource() || !x.Text.Equals("<p class=\"MsoNormal\">&nbsp;</p>")).Select(
-                    bodyElement =>
-                        bodyElement.IsResource()
-                            ? GenerateIllustration(document, item.Id, imageCount++, bodyElement)
-                            : GenerateStem(document, bodyElement.Text)).ToList();
+                item.Body.Elements.Where(x => x.IsResource() || !x.Text.Equals("<p class=\"MsoNormal\">&nbsp;</p>"))
+                    .Select(
+                        bodyElement =>
+                            bodyElement.IsResource()
+                                ? GenerateIllustration(document, item.Id, imageCount++, bodyElement)
+                                : GenerateStem(document, bodyElement.Text)).ToList();
 
             var optionListElement = document.CreateElement("optionlist");
             foreach (var key in item.Body.AnswerChoices.Keys)
