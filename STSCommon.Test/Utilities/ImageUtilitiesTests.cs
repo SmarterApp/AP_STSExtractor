@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using HtmlAgilityPack;
 using NUnit.Framework;
+using STSCommon.Extensions;
+using STSCommon.Utilities;
 
 namespace STSCommon.Test.Utilities
 {
@@ -17,16 +21,20 @@ namespace STSCommon.Test.Utilities
         public static readonly string ResourcesDirectory =
             Path.Combine(Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.FullName, "Resources");
 
+        [Test]
         public void RetrieveValidImageFromValidNode()
         {
             // Arrange
-            const string stringNode = "<img src=\"puppy.jpg\" />";
             var document = new HtmlDocument();
-            document.LoadHtml(stringNode);
+            document.LoadHtml("<img src=\"puppy.jpg\" />");
             var imageNode = document.DocumentNode.SelectSingleNode("//img");
 
             // Act
+            var result = ImageUtilities.ImageFromParentHtmlNode(imageNode);
+
             // Assert
+            Assert.IsTrue(result.RawFormat.Equals(ImageFormat.Jpeg));
+            Assert.IsTrue(result.Size.Equals(new Size(720,720)));
         }
     }
 }
