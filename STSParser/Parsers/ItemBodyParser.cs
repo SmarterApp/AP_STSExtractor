@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using HtmlAgilityPack;
+using NLog;
 using STSCommon;
 using STSCommon.Models.Item;
 using STSCommon.Utilities;
@@ -8,6 +9,9 @@ namespace STSParser.Parsers
 {
     public static class ItemBodyParser
     {
+
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         public static ItemBody Parse(HtmlNode table)
         {
             var itemBody = new ItemBody();
@@ -20,6 +24,7 @@ namespace STSParser.Parsers
 
                 if (!string.IsNullOrEmpty(answer))
                 {
+                    Logger.Trace($"Parsing answer for {answer}");
                     itemBody.AnswerChoices.Add(answer,
                         HtmlNodeUtilities.BodyElementFromNode(ExtractionSettings.Input, p));
                     if (!itemBody.AnswerChoices[answer].IsResource())
@@ -32,6 +37,7 @@ namespace STSParser.Parsers
                 }
                 else
                 {
+                    Logger.Trace("Parsing item body");
                     itemBody.Elements.Add(HtmlNodeUtilities.BodyElementFromNode(ExtractionSettings.Input, p));
                 }
             }
