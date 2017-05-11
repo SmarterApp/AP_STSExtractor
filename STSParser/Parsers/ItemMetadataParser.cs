@@ -11,7 +11,6 @@ namespace STSParser.Parsers
 {
     public static class ItemMetadataParser
     {
-
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public static StsMetadata Parse(HtmlNode table, bool isPassage = false)

@@ -9,7 +9,6 @@ namespace STSParser.Parsers
 {
     public static class ItemBodyParser
     {
-
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public static ItemBody Parse(HtmlNode table)
