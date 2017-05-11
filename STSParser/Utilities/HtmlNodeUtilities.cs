@@ -8,7 +8,7 @@ namespace STSParser.Utilities
 {
     public static class HtmlNodeUtilities
     {
-        public static BodyElement BodyElementFromNode(HtmlNode node)
+        public static BodyElement BodyElementFromNode(string path, HtmlNode node)
         {
             var element = new BodyElement();
             var imgNode =
@@ -16,7 +16,7 @@ namespace STSParser.Utilities
             element.Text = node.OuterHtml;
             if (imgNode != null)
             {
-                element.Image = ImageUtilities.ImageFromParentHtmlNode(imgNode);
+                element.Image = ImageUtilities.ImageFromParentHtmlNode(path, imgNode);
             }
             return element;
         }

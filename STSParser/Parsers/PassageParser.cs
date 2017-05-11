@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using HtmlAgilityPack;
+using STSCommon;
 using STSCommon.Extensions;
 using STSParser.Models.Passage;
 using STSParser.Utilities;
@@ -38,7 +39,7 @@ namespace STSParser.Parsers
                 }
                 else
                 {
-                    passage.Body.Elements.Add(HtmlNodeUtilities.BodyElementFromNode(node));
+                    passage.Body.Elements.Add(HtmlNodeUtilities.BodyElementFromNode(ExtractionSettings.Input, node));
                 }
             }
             return passage;

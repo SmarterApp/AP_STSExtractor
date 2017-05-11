@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using HtmlAgilityPack;
+using STSCommon;
 using STSCommon.Utilities;
 using STSParser.Models.Item;
 using STSParser.Utilities;
@@ -20,7 +21,8 @@ namespace STSParser.Parsers
 
                 if (!string.IsNullOrEmpty(answer))
                 {
-                    itemBody.AnswerChoices.Add(answer, HtmlNodeUtilities.BodyElementFromNode(p));
+                    itemBody.AnswerChoices.Add(answer,
+                        HtmlNodeUtilities.BodyElementFromNode(ExtractionSettings.Input, p));
                     if (!itemBody.AnswerChoices[answer].IsResource())
                     {
                         var document = new HtmlDocument();
@@ -31,7 +33,7 @@ namespace STSParser.Parsers
                 }
                 else
                 {
-                    itemBody.Elements.Add(HtmlNodeUtilities.BodyElementFromNode(p));
+                    itemBody.Elements.Add(HtmlNodeUtilities.BodyElementFromNode(ExtractionSettings.Input, p));
                 }
             }
             return itemBody;
