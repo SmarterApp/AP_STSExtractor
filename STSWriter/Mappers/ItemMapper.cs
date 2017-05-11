@@ -4,8 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using STSCommon;
-using STSParser.Models;
-using STSParser.Models.Item;
+using STSCommon.Models;
+using STSCommon.Models.Item;
 
 namespace STSWriter.Mappers
 {

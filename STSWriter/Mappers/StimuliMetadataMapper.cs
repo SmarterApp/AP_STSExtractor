@@ -1,5 +1,5 @@
 ﻿using System.Xml;
-using STSParser.Models.Passage;
+using STSCommon.Models.Passage;
 
 namespace STSWriter.Mappers
 {

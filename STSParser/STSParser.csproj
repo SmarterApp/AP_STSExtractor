@@ -50,21 +50,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\BodyElement.cs" />
-    <Compile Include="Models\Item\ItemBody.cs" />
-    <Compile Include="Models\Passage\PassageBody.cs" />
     <Compile Include="Parsers\DocumentParser.cs" />
-    <Compile Include="Models\Item\Item.cs" />
-    <Compile Include="Models\Passage\Passage.cs" />
-    <Compile Include="Models\StsMetadata.cs" />
-    <Compile Include="Models\Item\ItemMetadata.cs" />
-    <Compile Include="Models\Passage\PassageMetadata.cs" />
     <Compile Include="Parsers\ItemBodyParser.cs" />
     <Compile Include="Parsers\ItemMetadataParser.cs" />
     <Compile Include="Parsers\PassageParser.cs" />
-    <Compile Include="Models\STSAssessment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utilities\HtmlNodeUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

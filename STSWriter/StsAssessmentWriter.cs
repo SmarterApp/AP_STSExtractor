@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
 using STSCommon;
-using STSParser.Models;
+using STSCommon.Models;
 using STSWriter.Mappers;
 
 namespace STSWriter

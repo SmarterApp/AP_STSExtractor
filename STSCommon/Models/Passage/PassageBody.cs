@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace STSParser.Models.Passage
+namespace STSCommon.Models.Passage
 {
     public class PassageBody
     {

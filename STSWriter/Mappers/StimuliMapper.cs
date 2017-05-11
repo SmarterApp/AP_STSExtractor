@@ -4,7 +4,7 @@ using System.Linq;
 using System.Xml;
 using STSCommon;
 using STSCommon.Extensions;
-using STSParser.Models.Passage;
+using STSCommon.Models.Passage;
 
 namespace STSWriter.Mappers
 {

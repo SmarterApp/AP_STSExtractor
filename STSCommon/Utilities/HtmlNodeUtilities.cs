@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Linq;
 using HtmlAgilityPack;
-using STSCommon.Utilities;
-using STSParser.Models;
+using STSCommon.Models;
 
-namespace STSParser.Utilities
+namespace STSCommon.Utilities
 {
     public static class HtmlNodeUtilities
     {

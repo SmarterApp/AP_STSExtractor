@@ -1,9 +1,8 @@
 ﻿using System.Linq;
 using HtmlAgilityPack;
 using STSCommon;
+using STSCommon.Models.Item;
 using STSCommon.Utilities;
-using STSParser.Models.Item;
-using STSParser.Utilities;
 
 namespace STSParser.Parsers
 {

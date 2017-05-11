@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace STSParser.Models
+namespace STSCommon.Models
 {
     public class StsMetadata : Dictionary<string, string>
     {

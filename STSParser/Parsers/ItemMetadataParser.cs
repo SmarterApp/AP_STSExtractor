@@ -1,10 +1,10 @@
 ﻿using System.Linq;
 using HtmlAgilityPack;
 using STSCommon.Extensions;
+using STSCommon.Models;
+using STSCommon.Models.Item;
+using STSCommon.Models.Passage;
 using STSCommon.Utilities;
-using STSParser.Models;
-using STSParser.Models.Item;
-using STSParser.Models.Passage;
 
 namespace STSParser.Parsers
 {

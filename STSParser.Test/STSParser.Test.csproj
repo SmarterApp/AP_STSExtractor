@@ -66,6 +66,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\STSCommon\STSCommon.csproj">
+      <Project>{67d48272-a82e-4a98-9986-de683df7c6f5}</Project>
+      <Name>STSCommon</Name>
+    </ProjectReference>
     <ProjectReference Include="..\STSParser\STSParser.csproj">
       <Project>{0B538924-A48D-4AB3-931A-9D12FFB196EC}</Project>
       <Name>STSParser</Name>

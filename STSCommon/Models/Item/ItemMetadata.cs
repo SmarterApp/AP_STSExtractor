@@ -1,4 +1,4 @@
-﻿namespace STSParser.Models.Item
+﻿namespace STSCommon.Models.Item
 {
     public class ItemMetadata : StsMetadata
     {

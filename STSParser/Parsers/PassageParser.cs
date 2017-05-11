@@ -4,8 +4,8 @@ using System.Linq;
 using HtmlAgilityPack;
 using STSCommon;
 using STSCommon.Extensions;
-using STSParser.Models.Passage;
-using STSParser.Utilities;
+using STSCommon.Models.Passage;
+using STSCommon.Utilities;
 
 namespace STSParser.Parsers
 {
