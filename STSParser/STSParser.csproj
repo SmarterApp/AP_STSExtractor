@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2F3E141E-77E7-43E5-ADA6-10127722D5B5}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>STSExtractor</RootNamespace>
-    <AssemblyName>STSExtractor</AssemblyName>
+    <ProjectGuid>{0B538924-A48D-4AB3-931A-9D12FFB196EC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>STSParser</RootNamespace>
+    <AssemblyName>STSParser</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="HtmlAgilityPack, Version=1.4.9.5, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <HintPath>..\packages\HtmlAgilityPack.1.4.9.5\lib\Net45\HtmlAgilityPack.dll</HintPath>
@@ -44,33 +47,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Parsers\DocumentParser.cs" />
+    <Compile Include="Parsers\ItemBodyParser.cs" />
+    <Compile Include="Parsers\ItemMetadataParser.cs" />
+    <Compile Include="Parsers\PassageParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
-    <Content Include="NLog.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <None Include="NLog.xsd">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\STSCommon\STSCommon.csproj">
       <Project>{67d48272-a82e-4a98-9986-de683df7c6f5}</Project>
       <Name>STSCommon</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\STSParser\STSParser.csproj">
-      <Project>{0b538924-a48d-4ab3-931a-9d12ffb196ec}</Project>
-      <Name>STSParser</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\STSWriter\STSWriter.csproj">
-      <Project>{313376A8-5874-4608-8E6D-E2123AEE3D26}</Project>
-      <Name>STSWriter</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

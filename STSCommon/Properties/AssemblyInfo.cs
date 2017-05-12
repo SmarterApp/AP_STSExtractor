@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-[assembly: AssemblyTitle("STSExtractor")]
+[assembly: AssemblyTitle("STSCommon")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("STSExtractor")]
+[assembly: AssemblyProduct("STSCommon")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -22,7 +22,7 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 
-[assembly: Guid("2f3e141e-77e7-43e5-ada6-10127722d5b5")]
+[assembly: Guid("67d48272-a82e-4a98-9986-de683df7c6f5")]
 
 // Version information for an assembly consists of the following four values:
 //

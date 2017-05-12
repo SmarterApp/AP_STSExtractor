@@ -4,17 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2F3E141E-77E7-43E5-ADA6-10127722D5B5}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>STSExtractor</RootNamespace>
-    <AssemblyName>STSExtractor</AssemblyName>
+    <ProjectGuid>{67D48272-A82E-4A98-9986-DE683DF7C6F5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>STSCommon</RootNamespace>
+    <AssemblyName>STSCommon</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +23,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -41,37 +39,34 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Extensions\HtmlDocumentExtensions.cs" />
+    <Compile Include="Extensions\LoggerExtenstions.cs" />
+    <Compile Include="ExtractionSettings.cs" />
+    <Compile Include="Models\BodyElement.cs" />
+    <Compile Include="Models\ErrorReportItem.cs" />
+    <Compile Include="Models\Item\Item.cs" />
+    <Compile Include="Models\Item\ItemBody.cs" />
+    <Compile Include="Models\Item\ItemMetadata.cs" />
+    <Compile Include="Models\Passage\Passage.cs" />
+    <Compile Include="Models\Passage\PassageBody.cs" />
+    <Compile Include="Models\Passage\PassageMetadata.cs" />
+    <Compile Include="Models\ProcessingReportItem.cs" />
+    <Compile Include="Models\STSAssessment.cs" />
+    <Compile Include="Models\StsMetadata.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\ApplicationSettings.cs" />
+    <Compile Include="Utilities\HtmlNodeUtilities.cs" />
+    <Compile Include="Utilities\ImageUtilities.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Utilities\StringUtilities.cs" />
+    <Compile Include="Extensions\XmlElementExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
-    <Content Include="NLog.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <None Include="NLog.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\STSCommon\STSCommon.csproj">
-      <Project>{67d48272-a82e-4a98-9986-de683df7c6f5}</Project>
-      <Name>STSCommon</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\STSParser\STSParser.csproj">
-      <Project>{0b538924-a48d-4ab3-931a-9d12ffb196ec}</Project>
-      <Name>STSParser</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\STSWriter\STSWriter.csproj">
-      <Project>{313376A8-5874-4608-8E6D-E2123AEE3D26}</Project>
-      <Name>STSWriter</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
