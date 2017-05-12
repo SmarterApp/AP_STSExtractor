@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using STSCommon;
 
-namespace STSParser.Models
+namespace STSCommon.Models
 {
     public class StsAssessment
     {

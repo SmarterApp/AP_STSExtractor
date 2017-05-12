@@ -1,14 +1,16 @@
 ﻿using System.Linq;
 using HtmlAgilityPack;
-using STSCommon.Extensions;
+using NLog;
+using STSCommon;
+using STSCommon.Models.Item;
 using STSCommon.Utilities;
-using STSParser.Models.Item;
-using STSParser.Utilities;
 
 namespace STSParser.Parsers
 {
     public static class ItemBodyParser
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         public static ItemBody Parse(HtmlNode table)
         {
             var itemBody = new ItemBody();
@@ -21,7 +23,9 @@ namespace STSParser.Parsers
 
                 if (!string.IsNullOrEmpty(answer))
                 {
-                    itemBody.AnswerChoices.Add(answer, HtmlNodeUtilities.BodyElementFromNode(p));
+                    Logger.Trace($"Parsing answer for {answer}");
+                    itemBody.AnswerChoices.Add(answer,
+                        HtmlNodeUtilities.BodyElementFromNode(ExtractionSettings.Input, p));
                     if (!itemBody.AnswerChoices[answer].IsResource())
                     {
                         var document = new HtmlDocument();
@@ -32,7 +36,8 @@ namespace STSParser.Parsers
                 }
                 else
                 {
-                    itemBody.Elements.Add(HtmlNodeUtilities.BodyElementFromNode(p));
+                    Logger.Trace("Parsing item body");
+                    itemBody.Elements.Add(HtmlNodeUtilities.BodyElementFromNode(ExtractionSettings.Input, p));
                 }
             }
             return itemBody;

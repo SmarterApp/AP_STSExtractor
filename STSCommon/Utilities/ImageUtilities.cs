@@ -8,18 +8,18 @@ namespace STSCommon.Utilities
 {
     public static class ImageUtilities
     {
-        public static Image ImageFromParentHtmlNode(HtmlNode node)
+        public static Image ImageFromParentHtmlNode(string path, HtmlNode node)
         {
-            return Image.FromFile(Path.Combine(GetSourceDirectory(), RetrieveChildImageSource(node)));
+            return Image.FromFile(Path.Combine(GetSourceDirectory(path), RetrieveChildImageSource(node)));
         }
 
-        private static string GetSourceDirectory()
+        private static string GetSourceDirectory(string path)
         {
-            if (string.IsNullOrEmpty(ExtractionSettings.Input) || !File.Exists(ExtractionSettings.Input))
+            if (string.IsNullOrEmpty(path) || !File.Exists(path))
             {
                 throw new ArgumentException("Bad input path specified");
             }
-            return new FileInfo(ExtractionSettings.Input).DirectoryName;
+            return new FileInfo(path).DirectoryName;
         }
 
         private static string RetrieveChildImageSource(HtmlNode node)

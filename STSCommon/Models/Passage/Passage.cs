@@ -1,4 +1,4 @@
-﻿namespace STSParser.Models.Passage
+﻿namespace STSCommon.Models.Passage
 {
     public class Passage
     {

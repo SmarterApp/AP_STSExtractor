@@ -2,9 +2,9 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Xml;
-using HtmlAgilityPack;
 using STSCommon;
-using STSParser.Models.Passage;
+using STSCommon.Extensions;
+using STSCommon.Models.Passage;
 
 namespace STSWriter.Mappers
 {
@@ -70,20 +70,10 @@ namespace STSWriter.Mappers
 
             stemElement.AppendChild(
                 document.CreateCDataSection(
-                    $"{passage.Body.Elements.ToList().Select(x => x.IsResource() ? UpdateImageReference(x.Text, $"{passage.Id}_{elementCount++}.png") : x.Text).Aggregate((x, y) => $"{x}{y}")}>"));
+                    $"{passage.Body.Elements.ToList().Select(x => x.IsResource() ? x.Text.ProduceImgElementWithSourceFromStringElement($"{passage.Id}_{elementCount++}.png") : x.Text).Aggregate((x, y) => $"{x}{y}")}>"));
             contentElement.AppendChild(stemElement);
 
             return contentElement;
-        }
-
-        private static string UpdateImageReference(string imageElement, string replacementSource)
-        {
-            var document = new HtmlDocument();
-            document.LoadHtml(imageElement);
-            var imageNode = document.DocumentNode.SelectSingleNode("//img");
-            imageNode.Attributes.RemoveAll();
-            imageNode.SetAttributeValue("src", replacementSource);
-            return imageNode.OuterHtml;
         }
 
         private static XmlElement GenerateAttribList(XmlDocument document, Passage passage)

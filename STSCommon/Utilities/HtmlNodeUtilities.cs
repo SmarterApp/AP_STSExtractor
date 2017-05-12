@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Linq;
 using HtmlAgilityPack;
-using STSCommon.Utilities;
-using STSParser.Models;
+using STSCommon.Models;
 
-namespace STSParser.Utilities
+namespace STSCommon.Utilities
 {
     public static class HtmlNodeUtilities
     {
-        public static BodyElement BodyElementFromNode(HtmlNode node)
+        public static BodyElement BodyElementFromNode(string path, HtmlNode node)
         {
             var element = new BodyElement();
             var imgNode =
@@ -16,7 +15,7 @@ namespace STSParser.Utilities
             element.Text = node.OuterHtml;
             if (imgNode != null)
             {
-                element.Image = ImageUtilities.ImageFromParentHtmlNode(imgNode);
+                element.Image = ImageUtilities.ImageFromParentHtmlNode(path, imgNode);
             }
             return element;
         }

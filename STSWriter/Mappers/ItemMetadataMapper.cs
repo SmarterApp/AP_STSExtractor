@@ -3,7 +3,7 @@ using System.Linq;
 using System.Xml;
 using STSCommon;
 using STSCommon.Extensions;
-using STSParser.Models.Item;
+using STSCommon.Models.Item;
 
 namespace STSWriter.Mappers
 {
