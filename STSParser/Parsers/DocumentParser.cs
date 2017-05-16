@@ -2,6 +2,7 @@
 using System.Linq;
 using HtmlAgilityPack;
 using NLog;
+using STSCommon.Extensions;
 using STSCommon.Models;
 using STSCommon.Models.Item;
 
@@ -53,11 +54,25 @@ namespace STSParser.Parsers
                         result.Items.Add(new Item {Metadata = (ItemMetadata) ItemMetadataParser.Parse(nodes[i])});
                         isItemMetadata = false;
                     }
-                    else if (nodes[i].Name.Equals("table", StringComparison.OrdinalIgnoreCase) && !isItemMetadata
-                        && result.Items.Any())
+                    else if (nodes[i].Name.Equals("table", StringComparison.OrdinalIgnoreCase) && !isItemMetadata)
                     {
                         Logger.Trace("Processing item body");
-                        result.Items.Last().Body = ItemBodyParser.Parse(nodes[i]);
+                        if (result.Items.Any())
+                        {
+                            result.Items.Last().Body = ItemBodyParser.Parse(nodes[i]);
+                        }
+                        else
+                        {
+                            Logger.LogError(new ErrorReportItem
+                            {
+                                Location = "Document Parser",
+                                Severity = LogLevel.Warn
+                            }, $"Unattached table likely belongs to a previous passage element {result.Passages.Last().Metadata["PassageCode"]} - Appending to the end. May require manual intervention");
+                            result.Passages.Last().Body.Elements.Add(new BodyElement
+                            {
+                                Text = nodes[i].OuterHtml
+                            });
+                        }
                     }
                 }
             }
