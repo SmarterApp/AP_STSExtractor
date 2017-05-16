@@ -53,7 +53,8 @@ namespace STSParser.Parsers
                         result.Items.Add(new Item {Metadata = (ItemMetadata) ItemMetadataParser.Parse(nodes[i])});
                         isItemMetadata = false;
                     }
-                    else if (nodes[i].Name.Equals("table", StringComparison.OrdinalIgnoreCase) && !isItemMetadata)
+                    else if (nodes[i].Name.Equals("table", StringComparison.OrdinalIgnoreCase) && !isItemMetadata
+                        && result.Items.Any())
                     {
                         Logger.Trace("Processing item body");
                         result.Items.Last().Body = ItemBodyParser.Parse(nodes[i]);
