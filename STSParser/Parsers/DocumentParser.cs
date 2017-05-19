@@ -64,10 +64,11 @@ namespace STSParser.Parsers
                         else
                         {
                             Logger.LogError(new ErrorReportItem
-                            {
-                                Location = "Document Parser",
-                                Severity = LogLevel.Warn
-                            }, $"Unattached table likely belongs to a previous passage element {result.Passages.Last().Metadata["PassageCode"]} - Appending to the end. May require manual intervention");
+                                {
+                                    Location = "Document Parser",
+                                    Severity = LogLevel.Warn
+                                },
+                                $"Unattached table likely belongs to a previous passage element {result.Passages.Last().Metadata["PassageCode"]} - Appending to the end. May require manual intervention");
                             result.Passages.Last().Body.Elements.Add(new BodyElement
                             {
                                 Text = nodes[i].OuterHtml
