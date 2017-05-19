@@ -83,12 +83,16 @@ namespace STSWriter.Mappers
         {
             var imageCount = 0;
             var result =
-                item.Body.Elements.Where(x => x.IsResource() || !x.Text.Equals("<p class=\"MsoNormal\">&nbsp;</p>"))
+                item.Body.Elements
                     .Select(
                         bodyElement =>
                             bodyElement.IsResource()
                                 ? GenerateIllustration(document, item.Id, imageCount++, bodyElement)
                                 : GenerateStem(document, bodyElement.Text)).ToList();
+            if (result.Count > 1)
+            {
+                result = MergeAdjacentStems(document, result);
+            }
 
             var optionListElement = document.CreateElement("optionlist");
             foreach (var key in item.Body.AnswerChoices.Keys)
@@ -113,6 +117,37 @@ namespace STSWriter.Mappers
 
             result.Add(optionListElement);
             return result;
+        }
+
+        private static List<XmlElement> MergeAdjacentStems(XmlDocument document, IList<XmlElement> stems)
+        {
+            var mergedStems = new List<XmlElement>();
+            var stemElement = document.CreateElement("stem");
+            var text = string.Empty;
+            for (var i = 0; i < stems.Count; i++)
+            {
+                if (stems[i].Name.Equals("stem"))
+                {
+                    text = text + stems[i].InnerText;
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(text))
+                    {
+                        stemElement.AppendChild(document.CreateCDataSection(text));
+                        mergedStems.Add(stemElement);
+                        stemElement = document.CreateElement("stem");
+                        text = string.Empty;
+                    }
+                    mergedStems.Add(stems[i]);
+                }
+            }
+            if (!string.IsNullOrEmpty(text))
+            {
+                stemElement.AppendChild(document.CreateCDataSection(text));
+                mergedStems.Add(stemElement);
+            }
+            return mergedStems.ToList();
         }
 
         private static XmlElement GenerateFeedback(XmlDocument document)
